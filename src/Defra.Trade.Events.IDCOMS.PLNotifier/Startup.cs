@@ -5,9 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Common.AppConfig;
 using Defra.Trade.Common.Logging.Extensions;
 using Defra.Trade.Events.IDCOMS.PLNotifier;
-using Defra.Trade.Events.IDCOMS.PLNotifier.Infrastructure;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
+using Defra.Trade.Events.IDCOMS.PLNotifier.Infrastructure;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 
 [assembly: FunctionsStartup(typeof(Startup))]
