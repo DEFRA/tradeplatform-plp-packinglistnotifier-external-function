@@ -53,7 +53,7 @@ extends:
     appName: $(APIName)
     appProject: TRA
     appType: 'functionApp'
-    appInstanceNumber: $(nc-region-id)03 # TODO
+    appInstanceNumber: $(nc-region-id)05
     publishArguments: '--configuration Release'
     publishProject: '**/*Defra.Trade.Events.IDCOMS.PLNotifier.csproj'
     runHealthCheck: false
