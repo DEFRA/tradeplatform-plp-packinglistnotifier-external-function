@@ -33,16 +33,15 @@ resources:
       ref: master
   pipelines:
     - pipeline: INFRA
-      source: Defra.Trade.API.Infra TradePLPparsed # TODO
+      source: Defra.Trade.API.Infra Trade-PLP-IDOMSNotifier
       trigger:
         branches:
           include:
             - '*'
         stages:
           - DEV
-
 variables:
-  APIName: Defra.Trade.Events.IDCOMS.PLNotifier # TODO
+  APIName: Defra.Trade.Events.IDCOMS.PLNotifier
 
 extends:
   template: /templates/basic-webapp-deploy-pipeline.yaml@PipelineCommon
@@ -58,7 +57,6 @@ extends:
     publishProject: '**/*Defra.Trade.Events.IDCOMS.PLNotifier.csproj'
     runHealthCheck: false
     appSettingsEnv:
-    # TODO: all below
       dev: '-AzureResourceGroupName "$(Environment.Name)TRE$(nc-function-infrastructure)$(nc-resource-resourcegroup)1001" -AzureServiceBusName "$(Environment.Name)TRE$(nc-function-infrastructure)$(nc-resource-servicebus)1001" -ConfigurationServer:Uri "https://$(environment)TRDINFAC$(nc-region-id)01.azconfig.io" -KeyVaultEndpoint "https://$(environment)trd$(nc-function-infrastructure)$(nc-resource-keyvault)1001.vault.azure.net/"'
       snd: '-AzureResourceGroupName "$(Environment.Name)TRE$(nc-function-infrastructure)$(nc-resource-resourcegroup)1001" -AzureServiceBusName "$(Environment.Name)TRE$(nc-function-infrastructure)$(nc-resource-servicebus)1001" -ConfigurationServer:Uri "https://$(environment)TRDINFAC$(nc-region-id)01.azconfig.io" -KeyVaultEndpoint "https://$(environment)trd$(nc-function-infrastructure)$(nc-resource-keyvault)1001.vault.azure.net/"' 
       tst: '-AzureResourceGroupName "$(Environment.Name)TRE$(nc-function-infrastructure)$(nc-resource-resourcegroup)1001" -AzureServiceBusName "$(Environment.Name)TRE$(nc-function-infrastructure)$(nc-resource-servicebus)1001" -ConfigurationServer:Uri "https://$(environment)TRDINFAC$(nc-region-id)01.azconfig.io" -KeyVaultEndpoint "https://$(environment)trd$(nc-function-infrastructure)$(nc-resource-keyvault)1001.vault.azure.net/"'
