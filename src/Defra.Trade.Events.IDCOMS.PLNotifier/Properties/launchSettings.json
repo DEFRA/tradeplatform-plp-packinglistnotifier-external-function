@@ -1,0 +1,9 @@
+{
+    "profiles": {
+        "Defra.Trade.Events.IDCOMS.PLNotifier": {
+            "commandName": "Project",
+            "commandLineArgs": "--port 7130",
+            "launchBrowser": false
+        }
+    }
+}

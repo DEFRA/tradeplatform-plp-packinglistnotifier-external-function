@@ -1,0 +1,12 @@
+﻿// secrets reference can be found here: https://dev.azure.com/defragovuk/DEFRA-TRADE-APIS/_wiki/wikis/DEFRA-TRADE-APIS.wiki/26086
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "FUNCTIONS_INPROC_NET8_ENABLED": "1",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "ServiceBus:ConnectionString": "<secret>",
+        "ConfigurationServer:ConnectionString": "<secret>",
+        "ConfigurationServer:TenantId": "<secret>"
+    }
+}
