@@ -17,7 +17,7 @@ public sealed class PlNotifierServiceBusTriggerFunction
     [ServiceBusAccount(PlNotifierSettings.ConnectionStringConfigurationKey)]
     [FunctionName(nameof(PlNotifierServiceBusTriggerFunction))]
     public void Run(
-        [ServiceBusTrigger(queueName: PlNotifierSettings.DefaultQueueName, IsSessionsEnabled = true)] ServiceBusReceivedMessage message,
+        [ServiceBusTrigger(queueName: PlNotifierSettings.DefaultQueueName, IsSessionsEnabled = false)] ServiceBusReceivedMessage message,
         ServiceBusMessageActions messageActions,
         ExecutionContext executionContext,
         [ServiceBus(PlNotifierSettings.TradeEventInfo)] IAsyncCollector<ServiceBusMessage> eventStoreCollector,

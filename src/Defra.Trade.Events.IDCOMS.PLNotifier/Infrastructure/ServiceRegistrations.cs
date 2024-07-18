@@ -32,7 +32,8 @@ public static class ServiceRegistrations
         services.Configure<ServiceBusSettings>(configuration.GetSection(ServiceBusSettings.OptionsName));
 
         // TODO
-        services.AddCrm(configuration.GetSection("TBC:Dynamics"));
+        // DevOps needs to assign appconfig for PLP
+        services.AddCrm(configuration.GetSection("SuSRemosSubscriber:Dynamics"));
 
         return services;
     }
