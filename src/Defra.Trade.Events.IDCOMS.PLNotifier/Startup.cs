@@ -25,10 +25,9 @@ public sealed class Startup : FunctionsStartup
             .AddTradeAppConfiguration(configuration)
             .AddServiceRegistrations(configuration)
             .AddApplication()
-            .AddFunctionLogging("PlNotifier");
+            .AddFunctionLogging("PLNotifier");
 
-        // TODO
-        //builder.ConfigureMapper();
+        builder.ConfigureMapper();
     }
 
     public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
