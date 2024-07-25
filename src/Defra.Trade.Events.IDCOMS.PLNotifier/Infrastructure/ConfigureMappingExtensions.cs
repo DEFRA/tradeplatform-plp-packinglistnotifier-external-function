@@ -1,9 +1,6 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
-using System;
-using System.Linq;
-using AutoMapper;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Mappers;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 

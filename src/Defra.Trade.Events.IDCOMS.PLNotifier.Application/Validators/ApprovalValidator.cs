@@ -3,7 +3,6 @@
 
 using Defra.Trade.Common.Functions.Validation;
 using FluentValidation;
-using Inbound = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 
@@ -25,6 +24,6 @@ public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
 
     private bool BeApprovalStatus(string status)
     {
-        return _approvalStatus.Contains(status);
+        return _approvalStatus.Contains(status.ToLower());
     }
 }

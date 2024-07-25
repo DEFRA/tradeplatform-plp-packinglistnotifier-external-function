@@ -1,27 +1,28 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
-using AutoMapper;
 using Defra.Trade.Common.Functions.Interfaces;
-using Inbound = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound;
-using Microsoft.Extensions.Logging;
 using Defra.Trade.Common.Functions.Models;
-
-using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound;
-
-using Models = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
+using Defra.Trade.Crm;
+using Defra.Trade.Crm.Exceptions;
+using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
 
 public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval, TradeEventMessageHeader>
 {
+    private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
-    private readonly IMapper _mapper; // TODO
 
-    public ApprovalMessageProcessor(IMapper mapper, ILogger<ApprovalMessageProcessor> logger)
+    public ApprovalMessageProcessor(
+        ICrmClient crmClient,
+        ILogger<ApprovalMessageProcessor> logger)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        ArgumentNullException.ThrowIfNull(crmClient);
+        ArgumentNullException.ThrowIfNull(logger);
+        _crmClient = crmClient;
+        _logger = logger;
     }
 
     public Task<CustomMessageHeader> BuildCustomMessageHeaderAsync() => Task.FromResult(new CustomMessageHeader());
@@ -30,33 +31,78 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 
     public async Task<StatusResponse<Models.Approval>> ProcessAsync(Models.Approval message, TradeEventMessageHeader messageHeader)
     {
+        _logger.ProcessingNotification(message.ApplicationId!);
+
         try
         {
-            var x = _mapper.Map<Approval>(message);
+            var dynamicsPayload = MapToDynamics(message);
+            await SendToDynamics(dynamicsPayload);
 
-            await MapToDynamics();
-            //await SendToDynamics();
-
-            _logger.LogInformation(nameof(ProcessAsync));
+            _logger.ProcessingNotificationSuccess(message.ApplicationId!);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            _logger.MapToDynamicsFailure(ex, message.ApplicationId!);
+            throw;
+        }
+        catch (CrmException ex)
+        {
+            _logger.SendPayloadFailure(ex, message.ApplicationId!);
+            throw;
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, ex.Message);
+            _logger.ProcessingNotificationFailure(ex, message.ApplicationId!);
+            throw;
         }
 
         return new StatusResponse<Models.Approval>() { ForwardMessage = false, Response = message };
     }
 
     public Task<bool> ValidateMessageLabelAsync(TradeEventMessageHeader messageHeader)
-        => Task.FromResult(messageHeader.Label.Equals(Models.PlNotifierHeaderConstants.Label, StringComparison.OrdinalIgnoreCase));
+        => Task.FromResult(messageHeader.Label!.Equals(Models.PlNotifierHeaderConstants.Label, StringComparison.OrdinalIgnoreCase));
 
-    private async Task MapToDynamics()
+    private Dynamics.ApprovalPayload MapToDynamics(Models.Approval message)
     {
-        // TODO
+        _logger.MapToDynamics(message.ApplicationId!);
+
+        var dynamicsApprovalStatus = message.ApprovalStatus!.ToLower() switch
+        {
+            "approved" => Dynamics.ApprovalStatus.Approved,
+            "rejected" => Dynamics.ApprovalStatus.Rejected,
+            _ => throw new ArgumentOutOfRangeException(nameof(message))
+        };
+
+        var payload = new Dynamics.ApprovalPayload
+        {
+            ApplicationId = message.ApplicationId,
+            ApprovalStatus = (int)dynamicsApprovalStatus
+        };
+
+        _logger.MapToDynamicsSuccess(payload.ApplicationId!);
+
+        return payload;
     }
 
-    private async Task SendToDynamics()
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Bug", "S1751:Loops with at most one iteration should be refactored", Justification = "Crm client library only provides IAsyncEnumerator for get action, and only 1 result is possible")]
+    private async Task SendToDynamics(Dynamics.ApprovalPayload payload)
     {
-        // TODO
+        _logger.SendPayload(payload.ApplicationId!);
+
+        _logger.GetExportApplicationId(payload.ApplicationId!);
+
+        var exportAppEnumerator = _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>($"trd_applicationreference eq '{payload.ApplicationId}'", default);
+
+        await foreach (var exportApp in exportAppEnumerator)
+        {
+            payload.ExportApplicationId = exportApp.First().ExportApplicationId;
+            break;
+        }
+
+        _logger.GetExportApplicationIdSuccess(payload.ApplicationId!, payload.ExportApplicationId!);
+
+        await _crmClient.UpdateAsync(payload);
+
+        _logger.SendPayloadSuccess(payload.ApplicationId!);
     }
 }
