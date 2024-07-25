@@ -210,7 +210,7 @@ public sealed class ApprovalMessageProcessorTests
         await Task.CompletedTask;
     }
 
-    private TradeEventMessageHeader GetValidTradeEventMessageHeader(string entityKey = null!)
+    private static TradeEventMessageHeader GetValidTradeEventMessageHeader(string entityKey = null!)
     {
         return new TradeEventMessageHeader
         {
