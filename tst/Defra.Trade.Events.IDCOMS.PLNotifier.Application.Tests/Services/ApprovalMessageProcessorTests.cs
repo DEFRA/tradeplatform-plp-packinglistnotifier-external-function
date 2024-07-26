@@ -1,6 +1,7 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.Services;
 
+[ExcludeFromCodeCoverage]
 public sealed class ApprovalMessageProcessorTests
 {
     private readonly ICrmClient _crmClient;

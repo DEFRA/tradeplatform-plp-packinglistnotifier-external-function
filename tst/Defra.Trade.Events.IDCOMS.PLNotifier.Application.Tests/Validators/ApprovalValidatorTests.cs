@@ -1,11 +1,12 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
-using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Dynamics;
+using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.Validators;
 
+[ExcludeFromCodeCoverage]
 public sealed class ApprovalValidatorTests
 {
     private readonly ApprovalValidator _sut;
