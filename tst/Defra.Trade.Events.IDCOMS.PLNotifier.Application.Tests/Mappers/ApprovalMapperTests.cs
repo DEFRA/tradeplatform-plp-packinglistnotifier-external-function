@@ -1,7 +1,9 @@
-﻿using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Mappers;
+﻿using System.Diagnostics.CodeAnalysis;
+using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Mappers;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.Mappers;
 
+[ExcludeFromCodeCoverage]
 public sealed class ApprovalMapperTests
 {
     private readonly IMapper _mapper;

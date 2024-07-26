@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
 
-[ExcludeFromCodeCoverage(Justification = "No value in covering")]
+[ExcludeFromCodeCoverage(Justification = "No value in covering startup")]
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)

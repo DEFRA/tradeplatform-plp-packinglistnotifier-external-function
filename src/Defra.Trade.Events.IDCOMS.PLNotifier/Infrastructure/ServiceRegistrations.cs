@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Infrastructure;
 
-[ExcludeFromCodeCoverage(Justification = "No value in covering")]
+[ExcludeFromCodeCoverage(Justification = "No value in covering startup")]
 public static class ServiceRegistrations
 {
     public static IServiceCollection AddServiceRegistrations(this IServiceCollection services, IConfiguration configuration)

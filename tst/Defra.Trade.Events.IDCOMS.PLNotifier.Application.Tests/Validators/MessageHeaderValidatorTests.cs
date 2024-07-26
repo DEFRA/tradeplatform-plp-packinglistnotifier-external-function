@@ -1,11 +1,13 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.Validators;
 
+[ExcludeFromCodeCoverage]
 public sealed class MessageHeaderValidatorTests
 {
     private readonly MessageHeaderValidator _sut;
