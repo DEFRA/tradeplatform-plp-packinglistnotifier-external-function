@@ -14,7 +14,7 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier;
 
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "No value in covering")]
 public sealed class Startup : FunctionsStartup
 {
     public override void Configure(IFunctionsHostBuilder builder)
