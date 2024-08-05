@@ -5,15 +5,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 
-public static class HealthCheckHttpTriggerFunction
+public sealed class HealthCheckHttpTriggerFunction
 {
-    [FunctionName("HealthCheckHttpTriggerFunction")]
-    public static IActionResult Health(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
+    private readonly HealthCheckService _healthCheckService;
+
+    public HealthCheckHttpTriggerFunction(HealthCheckService healthCheckService)
     {
-        return new StatusCodeResult(StatusCodes.Status200OK);
+        ArgumentNullException.ThrowIfNull(healthCheckService);
+        _healthCheckService = healthCheckService;
+    }
+
+    [FunctionName("HealthCheckHttpTriggerFunction")]
+    public async Task<IActionResult> RunAsync(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health")] HttpRequest request)
+    {
+        var healthReport = await _healthCheckService.CheckHealthAsync();
+
+        return new OkObjectResult(Enum.GetName(typeof(HealthStatus), healthReport.Status));
     }
 }

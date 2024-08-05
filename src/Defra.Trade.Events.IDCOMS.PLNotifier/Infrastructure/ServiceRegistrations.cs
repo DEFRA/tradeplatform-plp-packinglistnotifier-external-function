@@ -22,6 +22,8 @@ public static class ServiceRegistrations
 {
     public static IServiceCollection AddServiceRegistrations(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHealthChecks();
+
         return services
             .AddValidators()
             .AddEventStore()
