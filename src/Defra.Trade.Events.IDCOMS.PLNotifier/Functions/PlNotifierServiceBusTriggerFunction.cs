@@ -3,6 +3,7 @@
 
 using Azure.Messaging.ServiceBus;
 using Defra.Trade.Common.Functions;
+using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.ServiceBus;
@@ -13,11 +14,12 @@ namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 public sealed class PlNotifierServiceBusTriggerFunction
 {
     private readonly IBaseMessageProcessorService<Inbound.Approval> _baseMessageProcessorService;
-
-    public PlNotifierServiceBusTriggerFunction(IBaseMessageProcessorService<Inbound.Approval> baseMessageProcessorService)
+    private readonly IMessageRetryService _retry;
+    public PlNotifierServiceBusTriggerFunction(IBaseMessageProcessorService<Inbound.Approval> baseMessageProcessorService, IMessageRetryService retry)
     {
         ArgumentNullException.ThrowIfNull(baseMessageProcessorService);
         _baseMessageProcessorService = baseMessageProcessorService;
+        _retry = retry;
     }
 
     [ServiceBusAccount(Models.PlNotifierSettings.ConnectionStringConfigurationKey)]
@@ -27,10 +29,11 @@ public sealed class PlNotifierServiceBusTriggerFunction
         ServiceBusMessageActions messageActions,
         ExecutionContext executionContext,
         [ServiceBus(Models.PlNotifierSettings.TradeEventInfo)] IAsyncCollector<ServiceBusMessage> eventStoreCollector,
+        [ServiceBus(Models.PlNotifierSettings.DefaultQueueName)] IAsyncCollector<ServiceBusMessage> retryQueue,
         ILogger logger)
     {
         logger.MessageReceived(message.MessageId, executionContext.FunctionName);
-
+        _retry.SetContext(message, retryQueue);
         await RunInternal(message, messageActions, eventStoreCollector, executionContext, logger);
 
         logger.MessageProcessed(message.MessageId, executionContext.FunctionName);

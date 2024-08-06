@@ -1,11 +1,13 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using Defra.Trade.Common.Functions.Extensions;
+using System.Net;
 using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
-using Defra.Trade.Crm.Exceptions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
+using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
@@ -14,15 +16,20 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 {
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
+    private readonly TimeSpan messageRetryEnqueueTime;
+    private readonly IMessageRetryContextAccessor _retry;
 
     public ApprovalMessageProcessor(
         ICrmClient crmClient,
-        ILogger<ApprovalMessageProcessor> logger)
+        ILogger<ApprovalMessageProcessor> logger,
+        IMessageRetryContextAccessor retry)
     {
         ArgumentNullException.ThrowIfNull(crmClient);
         ArgumentNullException.ThrowIfNull(logger);
         _crmClient = crmClient;
         _logger = logger;
+        _retry = retry;
+        messageRetryEnqueueTime = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.EnqueueTimeSeconds);
     }
 
     public Task<CustomMessageHeader> BuildCustomMessageHeaderAsync() => Task.FromResult(new CustomMessageHeader());
@@ -40,20 +47,11 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 
             _logger.ProcessingNotificationSuccess(message.ApplicationId!);
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (HttpRequestException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
         {
-            _logger.MapToDynamicsFailure(ex, message.ApplicationId!);
-            throw;
-        }
-        catch (CrmException ex)
-        {
-            _logger.SendPayloadFailure(ex, message.ApplicationId!);
-            throw;
-        }
-        catch (Exception ex)
-        {
-            _logger.ProcessingNotificationFailure(ex, message.ApplicationId!);
-            throw;
+            _logger.LogError(ex, context.Message.MessageId, context.Message.RetryCount());
+
+            await context.RetryMessage(messageRetryEnqueueTime, messageRetryEnqueueTime, ex);
         }
 
         return new StatusResponse<Models.Approval>() { ForwardMessage = false, Response = message };

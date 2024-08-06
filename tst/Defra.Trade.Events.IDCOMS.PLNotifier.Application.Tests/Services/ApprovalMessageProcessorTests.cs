@@ -3,6 +3,11 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using AutoFixture;
+using AutoMapper;
+
+using Defra.Trade.Common.Functions.Extensions;
+using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
 using Defra.Trade.Crm.Exceptions;
@@ -17,13 +22,17 @@ public sealed class ApprovalMessageProcessorTests
 {
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
+    private readonly IMessageRetryContextAccessor retry;
+    private readonly IFixture fixture;
     private readonly ApprovalMessageProcessor _sut;
 
     public ApprovalMessageProcessorTests()
     {
+        fixture = new Fixture();
         _crmClient = A.Fake<ICrmClient>();
         _logger = A.Fake<ILogger<ApprovalMessageProcessor>>();
-        _sut = new ApprovalMessageProcessor(_crmClient, _logger);
+        retry = A.Fake<IMessageRetryContextAccessor>(p => p.Strict());
+        _sut = new ApprovalMessageProcessor(_crmClient, _logger, retry);
     }
 
     [Fact]
@@ -46,7 +55,8 @@ public sealed class ApprovalMessageProcessorTests
         // arrange
         var sut = () => new ApprovalMessageProcessor(
             p1NotNull ? _crmClient : null!,
-            p2NotNull ? _logger : null!);
+            p2NotNull ? _logger : null!,
+            retry);
 
         // act && assert
         sut.ShouldThrow<ArgumentNullException>();
@@ -56,7 +66,7 @@ public sealed class ApprovalMessageProcessorTests
     public void Ctor_WithParams_Instantiates()
     {
         // arrange
-        var sut = new ApprovalMessageProcessor(_crmClient, _logger);
+        var sut = new ApprovalMessageProcessor(_crmClient, _logger, retry);
 
         // act && assert
         sut.ShouldNotBeNull();
@@ -129,6 +139,38 @@ public sealed class ApprovalMessageProcessorTests
     }
 
     [Fact]
+    public async Task ProcessAsync_WithDynamicsError_ShouldRetry()
+    {
+        // arrange
+        var applicationId = $"someReference {Guid.NewGuid()}";
+        var header = GetValidTradeEventMessageHeader(applicationId);
+
+        var message = new Models.Approval
+                      {
+                          ApplicationId = applicationId,
+                          ApprovalStatus = "rejected"
+                      };
+        var messageRetryContext = A.Fake<IMessageRetryContext>();
+        var mockExportApplication = new Dynamics.ApprovalPayload
+                                    {
+                                        ApplicationId = message.ApplicationId,
+                                        ExportApplicationId = Guid.NewGuid()
+                                    };
+        A.CallTo(() => retry.Context).Returns(messageRetryContext);
+        A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
+            .ReturnsLazily(() => ToListPagedAsync(mockExportApplication));
+
+        A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default))
+            .ThrowsAsync(new CrmException("500", HttpStatusCode.InternalServerError, "mocked server error"));
+
+        // act && assert
+        var result = await _sut.ProcessAsync(message, header).ShouldThrowAsync<CrmException>();
+        result.Message.ShouldBe("mocked server error");
+        A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
     public async Task ProcessAsync_WithInvalidApprovalStatus_ThrowsArgumentOutOfRangeException()
     {
         // arrange
@@ -145,6 +187,8 @@ public sealed class ApprovalMessageProcessorTests
         var result = await _sut.ProcessAsync(message, header).ShouldThrowAsync<ArgumentOutOfRangeException>();
         result.Message.ShouldBe("Specified argument was out of the range of valid values. (Parameter 'message')");
     }
+
+  
 
     [Theory]
     [InlineData("Approved")]

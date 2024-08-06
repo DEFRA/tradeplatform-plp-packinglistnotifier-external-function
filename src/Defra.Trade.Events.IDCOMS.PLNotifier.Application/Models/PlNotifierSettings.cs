@@ -27,4 +27,10 @@ public sealed class PlNotifierSettings
     public const string TradeEventInfo = Common.Functions.Constants.QueueName.DefaultEventsInfoQueueName;
     public const string AppConfigSentinelName = "Sentinel";
     public string PlNotifierQueue { get; set; } = DefaultQueueName;
+
+    public static class MessageRetry
+    {
+        public const int MaxRetries = 10;
+        public const int EnqueueTimeSeconds = 30;
+    }
 }

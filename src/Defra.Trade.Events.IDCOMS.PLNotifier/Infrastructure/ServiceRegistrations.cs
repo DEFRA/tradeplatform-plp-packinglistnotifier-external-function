@@ -7,6 +7,7 @@ using Defra.Trade.Common.Functions;
 using Defra.Trade.Common.Functions.EventStore;
 using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
+using Defra.Trade.Common.Functions.Services;
 using Defra.Trade.Common.Functions.Validation;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Infrastructure;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
@@ -36,8 +37,16 @@ public static class ServiceRegistrations
         services.AddOptions<Models.PlNotifierSettings>().Bind(configName);
         services.Configure<ServiceBusSettings>(configuration.GetSection(ServiceBusSettings.OptionsName));
         services.AddCrm(configuration.GetSection("PLP:Dynamics"));
-
+        services.AddMessageRetryService();
         return services;
+    }
+
+    private static IServiceCollection AddMessageRetryService(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton<MessageRetryService>()
+            .AddSingleton<IMessageRetryService>(p => p.GetRequiredService<MessageRetryService>())
+            .AddSingleton<IMessageRetryContextAccessor>(p => p.GetRequiredService<MessageRetryService>());
     }
 
     private static IServiceCollection AddEventStore(this IServiceCollection services)
