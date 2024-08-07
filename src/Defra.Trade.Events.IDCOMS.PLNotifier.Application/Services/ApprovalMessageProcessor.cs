@@ -1,6 +1,8 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using System.Diagnostics.CodeAnalysis;
+
 using Defra.Trade.Common.Functions.Extensions;
 using System.Net;
 using Defra.Trade.Common.Functions.Interfaces;
@@ -42,6 +44,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         return await ProcessInternalAsync(message, messageHeader);
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Unable to mock static logger method.")]
     public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(
         Models.Approval message,
         TradeEventMessageHeader messageHeader)
