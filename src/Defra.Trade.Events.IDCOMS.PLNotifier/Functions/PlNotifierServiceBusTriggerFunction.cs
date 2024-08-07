@@ -1,6 +1,7 @@
 // Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
 using Defra.Trade.Common.Functions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 
+[ExcludeFromCodeCoverage(Justification = "Only testable output is logger extensions used which cannot be feasibly tested")]
 public sealed class PlNotifierServiceBusTriggerFunction
 {
     private readonly IBaseMessageProcessorService<Inbound.Approval> _baseMessageProcessorService;
@@ -22,7 +24,7 @@ public sealed class PlNotifierServiceBusTriggerFunction
 
     [ServiceBusAccount(Models.PlNotifierSettings.ConnectionStringConfigurationKey)]
     [FunctionName(nameof(PlNotifierServiceBusTriggerFunction))]
-    public async Task Run(
+    public async Task RunAsync(
         [ServiceBusTrigger(queueName: Models.PlNotifierSettings.DefaultQueueName, IsSessionsEnabled = false)] ServiceBusReceivedMessage message,
         ServiceBusMessageActions messageActions,
         ExecutionContext executionContext,

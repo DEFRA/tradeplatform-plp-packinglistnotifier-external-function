@@ -9,3 +9,6 @@ global using AutoFixture;
 global using AutoMapper;
 global using Shouldly;
 global using Xunit;
+global using Dynamics = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Dynamics;
+global using Inbound = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound;
+global using Models = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;

@@ -50,6 +50,11 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
             _logger.SendPayloadFailure(ex, message.ApplicationId!);
             throw;
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.GetExportApplicationIdFailure(ex, message.ApplicationId!);
+            throw;
+        }
         catch (Exception ex)
         {
             _logger.ProcessingNotificationFailure(ex, message.ApplicationId!);
