@@ -39,7 +39,13 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     public async Task<StatusResponse<Models.Approval>> ProcessAsync(Models.Approval message, TradeEventMessageHeader messageHeader)
     {
         _logger.ProcessingNotification(message.ApplicationId!);
+        return await ProcessInternalAsync(message, messageHeader);
+    }
 
+    public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(
+        Models.Approval message,
+        TradeEventMessageHeader messageHeader)
+    {
         try
         {
             var dynamicsPayload = MapToDynamics(message);
