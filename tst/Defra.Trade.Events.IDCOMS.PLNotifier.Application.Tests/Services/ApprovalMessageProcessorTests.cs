@@ -3,8 +3,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using AutoFixture;
-using AutoMapper;
 
 using Defra.Trade.Common.Functions.Extensions;
 using Defra.Trade.Common.Functions.Interfaces;
@@ -139,38 +137,6 @@ public sealed class ApprovalMessageProcessorTests
     }
 
     [Fact]
-    public async Task ProcessAsync_WithDynamicsError_ShouldRetry()
-    {
-        // arrange
-        var applicationId = $"someReference {Guid.NewGuid()}";
-        var header = GetValidTradeEventMessageHeader(applicationId);
-
-        var message = new Models.Approval
-                      {
-                          ApplicationId = applicationId,
-                          ApprovalStatus = "rejected"
-                      };
-        var messageRetryContext = A.Fake<IMessageRetryContext>();
-        var mockExportApplication = new Dynamics.ApprovalPayload
-                                    {
-                                        ApplicationId = message.ApplicationId,
-                                        ExportApplicationId = Guid.NewGuid()
-                                    };
-        A.CallTo(() => retry.Context).Returns(messageRetryContext);
-        A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
-            .ReturnsLazily(() => ToListPagedAsync(mockExportApplication));
-
-        A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default))
-            .ThrowsAsync(new CrmException("500", HttpStatusCode.InternalServerError, "mocked server error"));
-
-        // act && assert
-        var result = await _sut.ProcessAsync(message, header).ShouldThrowAsync<CrmException>();
-        result.Message.ShouldBe("mocked server error");
-        A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default)).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public async Task ProcessAsync_WithInvalidApprovalStatus_ThrowsArgumentOutOfRangeException()
     {
         // arrange
@@ -188,7 +154,45 @@ public sealed class ApprovalMessageProcessorTests
         result.Message.ShouldBe("Specified argument was out of the range of valid values. (Parameter 'message')");
     }
 
-  
+    [Theory]
+    [InlineData((HttpStatusCode)1)]
+    [InlineData((HttpStatusCode)100)]
+    [InlineData((HttpStatusCode)399)]
+    [InlineData((HttpStatusCode)400)]
+    [InlineData((HttpStatusCode)499)]
+    [InlineData((HttpStatusCode)600)]
+    [InlineData((HttpStatusCode)699)]
+    public async Task ProcessMessage_Should_IgnoreOtherRequestExceptions(HttpStatusCode? status)
+    {
+        // Arrange
+        var applicationId = $"someReference {Guid.NewGuid()}";
+        var header = GetValidTradeEventMessageHeader(applicationId);
+
+        var message = new Models.Approval
+        {
+            ApplicationId = applicationId,
+            ApprovalStatus = "rejected"
+        };
+        var exception = new HttpRequestException("Test exception", null, status);
+        var messageRetryContext = A.Fake<IMessageRetryContext>();
+        var mockExportApplication = new Dynamics.ApprovalPayload
+        {
+            ApplicationId = message.ApplicationId,
+            ExportApplicationId = Guid.NewGuid()
+        };
+        A.CallTo(() => retry.Context).Returns(messageRetryContext);
+        A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
+            .ReturnsLazily(() => ToListPagedAsync(mockExportApplication));
+
+        A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default))
+            .ThrowsAsync(exception);
+        var test = () => _sut.ProcessAsync(message, header);
+        // Act
+        var actual = await test.ShouldThrowAsync<HttpRequestException>();
+
+        //Assert
+        actual.ShouldBeSameAs(exception);
+    }
 
     [Theory]
     [InlineData("Approved")]
