@@ -4,7 +4,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 
-namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Functions;
+namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
 
 public class FakeHttpRequest : HttpRequest
 {
