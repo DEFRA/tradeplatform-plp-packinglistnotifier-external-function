@@ -73,11 +73,6 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         {
             await RetryMessage(context, ex, message.ApplicationId!);
         }
-        catch (InvalidOperationException ex)
-        {
-            _logger.GetExportApplicationIdFailure(ex, message.ApplicationId!);
-            throw;
-        }
         catch (Exception ex)
         {
             _logger.ProcessingNotificationFailure(ex, message.ApplicationId!);

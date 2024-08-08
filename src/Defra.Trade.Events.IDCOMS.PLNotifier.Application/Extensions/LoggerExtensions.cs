@@ -39,9 +39,6 @@ public static partial class LoggerExtensions
     [LoggerMessage(EventId = 16, EventName = nameof(GetExportApplicationIdSuccess), Level = LogLevel.Information, Message = "Got export application Id : {ExportApplicationID} for application Id : {ApplicationId} from dynamics")]
     public static partial void GetExportApplicationIdSuccess(this ILogger logger, string applicationId, Guid exportApplicationId);
 
-    [LoggerMessage(EventId = 17, EventName = nameof(GetExportApplicationIdFailure), Level = LogLevel.Error, Message = "Failed to get export application Id for application Id : {ApplicationId}")]
-    public static partial void GetExportApplicationIdFailure(this ILogger logger, InvalidOperationException ex, string applicationId);
-
     [LoggerMessage(EventId = 20, EventName = nameof(ProcessingNotification), Level = LogLevel.Information, Message = "Processing PL notification for application Id : {ApplicationId}")]
     public static partial void ProcessingNotification(this ILogger logger, string applicationId);
 
