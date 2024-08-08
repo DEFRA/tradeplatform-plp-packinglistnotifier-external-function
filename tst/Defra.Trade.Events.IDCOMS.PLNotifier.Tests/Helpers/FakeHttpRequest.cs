@@ -1,11 +1,13 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
 
+[ExcludeFromCodeCoverage(Justification = "Test helper")]
 public class FakeHttpRequest : HttpRequest
 {
     public override string? ContentType { get; set; } = string.Empty;

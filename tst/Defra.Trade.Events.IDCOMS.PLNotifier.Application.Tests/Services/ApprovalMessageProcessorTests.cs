@@ -203,15 +203,6 @@ public sealed class ApprovalMessageProcessorTests
         result.ShouldBeTrue();
     }
 
-    private static async IAsyncEnumerable<IEnumerable<Dynamics.ApprovalPayload>> ToListPagedAsync(Dynamics.ApprovalPayload payload)
-    {
-        var page = new List<Dynamics.ApprovalPayload>() { payload };
-
-        yield return page;
-
-        await Task.CompletedTask;
-    }
-
     private static TradeEventMessageHeader GetValidTradeEventMessageHeader(string entityKey = null!)
     {
         return new TradeEventMessageHeader
@@ -228,5 +219,14 @@ public sealed class ApprovalMessageProcessorTests
             TimestampUtc = 1704067200,
             Type = Common.Functions.Models.Enum.EventType.Internal
         };
+    }
+
+    private static async IAsyncEnumerable<IEnumerable<Dynamics.ApprovalPayload>> ToListPagedAsync(Dynamics.ApprovalPayload payload)
+    {
+        var page = new List<Dynamics.ApprovalPayload>() { payload };
+
+        yield return page;
+
+        await Task.CompletedTask;
     }
 }
