@@ -71,9 +71,6 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         }
         catch (CrmException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
         {
-            // add new logger retry message in LoggerExtensions
-            // ... _logger.blahblahblah(ex, appId, retryCount)
-
             await RetryMessage(context, ex, message.ApplicationId);
         }
         catch (Exception ex)
