@@ -21,12 +21,10 @@ public sealed class ApprovalMessageProcessorTests
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
     private readonly IMessageRetryContextAccessor _retry;
-    private readonly IFixture fixture;
     private readonly ApprovalMessageProcessor _sut;
 
     public ApprovalMessageProcessorTests()
     {
-        fixture = new Fixture();
         _crmClient = A.Fake<ICrmClient>();
         _logger = A.Fake<ILogger<ApprovalMessageProcessor>>();
         _retry = A.Fake<IMessageRetryContextAccessor>(p => p.Strict());
