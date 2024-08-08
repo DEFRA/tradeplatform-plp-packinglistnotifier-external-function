@@ -32,7 +32,7 @@ public sealed class Startup : FunctionsStartup
             .AddFunctionLogging("PLNotifier");
 
         var healthChecksBuilder = builder.Services.AddFunctionHealthChecks();
-        RegisterHealthChecks(healthChecksBuilder, builder.Services, configuration);
+        RegisterHealthChecks(healthChecksBuilder, configuration);
 
         builder.ConfigureMapper();
     }
@@ -49,7 +49,6 @@ public sealed class Startup : FunctionsStartup
 
     private static void RegisterHealthChecks(
     IHealthChecksBuilder builder,
-    IServiceCollection services,
     IConfiguration configuration)
     {
         builder
