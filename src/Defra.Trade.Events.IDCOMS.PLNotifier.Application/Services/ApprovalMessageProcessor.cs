@@ -8,6 +8,7 @@ using System.Net;
 using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
+using Defra.Trade.Crm.Exceptions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     {
         ArgumentNullException.ThrowIfNull(crmClient);
         ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(retry);
         _crmClient = crmClient;
         _logger = logger;
         _retry = retry;
@@ -44,28 +46,42 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         return await ProcessInternalAsync(message, messageHeader);
     }
 
-    [ExcludeFromCodeCoverage(Justification = "Unable to mock static logger method.")]
     public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(
         Models.Approval message,
         TradeEventMessageHeader messageHeader)
     {
+        if (string.IsNullOrWhiteSpace(message.ApplicationId))
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
+
         try
         {
             var dynamicsPayload = MapToDynamics(message);
             await SendToDynamics(dynamicsPayload);
 
-            _logger.ProcessingNotificationSuccess(message.ApplicationId!);
+            _logger.ProcessingNotificationSuccess(message.ApplicationId);
         }
-        catch (HttpRequestException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
+        catch (ArgumentOutOfRangeException ex) when (_retry.Context is { } context)
         {
-            _logger.LogError(ex, context.Message.MessageId, context.Message.RetryCount());
-
-            await context.RetryMessage(messageRetryEnqueueTime, messageRetryEnqueueTime, ex);
+            _logger.MapToDynamicsFailure(ex, message.ApplicationId!);
+            throw;
+        }
+        catch (CrmException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
+        {
+            await RetryMessage(context, ex, message.ApplicationId);
         }
 
         return new StatusResponse<Models.Approval>() { ForwardMessage = false, Response = message };
     }
 
+    [ExcludeFromCodeCoverage(Justification = "Unable to mock static logger method.")]
+    private async Task RetryMessage(IMessageRetryContext context, Exception ex, string applicationId)
+    {
+        _logger.ProcessingNotificationRetry(ex, applicationId, context.Message.RetryCount());
+
+        await context.RetryMessage(messageRetryEnqueueTime, messageRetryEnqueueTime, ex);
+    }
     public Task<bool> ValidateMessageLabelAsync(TradeEventMessageHeader messageHeader)
         => Task.FromResult(messageHeader.Label!.Equals(Models.PlNotifierHeaderConstants.Label, StringComparison.OrdinalIgnoreCase));
 

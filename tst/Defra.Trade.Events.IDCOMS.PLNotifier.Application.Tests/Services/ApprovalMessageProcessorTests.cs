@@ -3,8 +3,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Azure.Messaging.ServiceBus;
 
-using Defra.Trade.Common.Functions.Extensions;
 using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
@@ -55,6 +55,16 @@ public sealed class ApprovalMessageProcessorTests
             p1NotNull ? _crmClient : null!,
             p2NotNull ? _logger : null!,
             retry);
+
+        // act && assert
+        sut.ShouldThrow<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Ctor_RetryIsNull_ThrowsArgumentNullException()
+    {
+        // arrange
+        var sut = () => new ApprovalMessageProcessor(_crmClient, _logger, null!);
 
         // act && assert
         sut.ShouldThrow<ArgumentNullException>();
@@ -173,7 +183,11 @@ public sealed class ApprovalMessageProcessorTests
             ApplicationId = applicationId,
             ApprovalStatus = "rejected"
         };
-        var exception = new HttpRequestException("Test exception", null, status);
+        var mockedMessage = ServiceBusModelFactory.ServiceBusReceivedMessage(properties: new Dictionary<string, object?>
+        {
+            ["RetryCount"] = 10
+        });
+        var exception = new CrmException(HttpStatusCode.InternalServerError.ToString(), HttpStatusCode.InternalServerError, "Test exception");
         var messageRetryContext = A.Fake<IMessageRetryContext>();
         var mockExportApplication = new Dynamics.ApprovalPayload
         {
@@ -181,14 +195,16 @@ public sealed class ApprovalMessageProcessorTests
             ExportApplicationId = Guid.NewGuid()
         };
         A.CallTo(() => retry.Context).Returns(messageRetryContext);
+        A.CallTo(() => messageRetryContext.Message).Returns(mockedMessage);
+
         A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
             .ReturnsLazily(() => ToListPagedAsync(mockExportApplication));
-
         A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default))
             .ThrowsAsync(exception);
-        var test = () => _sut.ProcessAsync(message, header);
+
+        var test = async () => await _sut.ProcessAsync(message, header);
         // Act
-        var actual = await test.ShouldThrowAsync<HttpRequestException>();
+        var actual = await test.ShouldThrowAsync<CrmException>();
 
         //Assert
         actual.ShouldBeSameAs(exception);
