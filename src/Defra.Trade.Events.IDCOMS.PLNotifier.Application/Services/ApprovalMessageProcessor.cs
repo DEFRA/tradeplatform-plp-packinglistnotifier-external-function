@@ -1,11 +1,16 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using System.Diagnostics.CodeAnalysis;
+
+using Defra.Trade.Common.Functions.Extensions;
+using System.Net;
 using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
 using Defra.Trade.Crm.Exceptions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
+using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
@@ -14,15 +19,23 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 {
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
+    private readonly TimeSpan messageRetryEnqueueTime;
+    private readonly TimeSpan messageRetryWindow;
+    private readonly IMessageRetryContextAccessor _retry;
 
     public ApprovalMessageProcessor(
         ICrmClient crmClient,
-        ILogger<ApprovalMessageProcessor> logger)
+        ILogger<ApprovalMessageProcessor> logger,
+        IMessageRetryContextAccessor retry)
     {
         ArgumentNullException.ThrowIfNull(crmClient);
         ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(retry);
         _crmClient = crmClient;
         _logger = logger;
+        _retry = retry;
+        messageRetryEnqueueTime = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.EnqueueTimeSeconds);
+        messageRetryWindow = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.RetryWindowSeconds);
     }
 
     public Task<CustomMessageHeader> BuildCustomMessageHeaderAsync() => Task.FromResult(new CustomMessageHeader());
@@ -32,7 +45,18 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     public async Task<StatusResponse<Models.Approval>> ProcessAsync(Models.Approval message, TradeEventMessageHeader messageHeader)
     {
         _logger.ProcessingNotification(message.ApplicationId!);
+        if (string.IsNullOrWhiteSpace(message.ApplicationId))
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
 
+        return await ProcessInternalAsync(message, messageHeader);
+    }
+
+    public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(
+        Models.Approval message,
+        TradeEventMessageHeader messageHeader)
+    {
         try
         {
             var dynamicsPayload = MapToDynamics(message);
@@ -45,10 +69,9 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
             _logger.MapToDynamicsFailure(ex, message.ApplicationId!);
             throw;
         }
-        catch (CrmException ex)
+        catch (CrmException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
         {
-            _logger.SendPayloadFailure(ex, message.ApplicationId!);
-            throw;
+            await RetryMessage(context, ex, message.ApplicationId!);
         }
         catch (Exception ex)
         {
@@ -57,6 +80,14 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         }
 
         return new StatusResponse<Models.Approval>() { ForwardMessage = false, Response = message };
+    }
+
+    [ExcludeFromCodeCoverage(Justification = "Unable to mock static logger method.")]
+    private async Task RetryMessage(IMessageRetryContext context, Exception ex, string applicationId)
+    {
+        _logger.ProcessingNotificationRetry(ex, applicationId, context.Message.RetryCount());
+
+        await context.RetryMessage(messageRetryWindow, messageRetryEnqueueTime, ex);
     }
 
     public Task<bool> ValidateMessageLabelAsync(TradeEventMessageHeader messageHeader)

@@ -3,6 +3,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using Azure.Messaging.ServiceBus;
+
+using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
 using Defra.Trade.Crm.Exceptions;
@@ -17,13 +20,17 @@ public sealed class ApprovalMessageProcessorTests
 {
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
+    private readonly IMessageRetryContextAccessor _retry;
+    private readonly IFixture fixture;
     private readonly ApprovalMessageProcessor _sut;
 
     public ApprovalMessageProcessorTests()
     {
+        fixture = new Fixture();
         _crmClient = A.Fake<ICrmClient>();
         _logger = A.Fake<ILogger<ApprovalMessageProcessor>>();
-        _sut = new ApprovalMessageProcessor(_crmClient, _logger);
+        _retry = A.Fake<IMessageRetryContextAccessor>(p => p.Strict());
+        _sut = new ApprovalMessageProcessor(_crmClient, _logger, _retry);
     }
 
     [Fact]
@@ -38,15 +45,17 @@ public sealed class ApprovalMessageProcessorTests
     }
 
     [Theory]
-    [InlineData(true, false)]
-    [InlineData(false, true)]
-    [InlineData(false, false)]
-    public void Ctor_WithNullParams_ThrowsArgumentNullException(bool p1NotNull, bool p2NotNull)
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(true, false, false)]
+    public void Ctor_WithNullParams_ThrowsArgumentNullException(bool p1NotNull, bool p2NotNull, bool p3NotNull)
     {
         // arrange
         var sut = () => new ApprovalMessageProcessor(
             p1NotNull ? _crmClient : null!,
-            p2NotNull ? _logger : null!);
+            p2NotNull ? _logger : null!,
+            p3NotNull ? _retry : null!);
 
         // act && assert
         sut.ShouldThrow<ArgumentNullException>();
@@ -56,7 +65,7 @@ public sealed class ApprovalMessageProcessorTests
     public void Ctor_WithParams_Instantiates()
     {
         // arrange
-        var sut = new ApprovalMessageProcessor(_crmClient, _logger);
+        var sut = new ApprovalMessageProcessor(_crmClient, _logger, _retry);
 
         // act && assert
         sut.ShouldNotBeNull();
@@ -144,6 +153,50 @@ public sealed class ApprovalMessageProcessorTests
         // act && assert
         var result = await _sut.ProcessAsync(message, header).ShouldThrowAsync<ArgumentOutOfRangeException>();
         result.Message.ShouldBe("Specified argument was out of the range of valid values. (Parameter 'message')");
+    }
+
+    [Fact]
+    public async Task ProcessMessage_Should_IgnoreOtherRequestExceptions()
+    {
+        // Arrange
+        var applicationId = $"someReference {Guid.NewGuid()}";
+        var header = GetValidTradeEventMessageHeader(applicationId);
+
+        var message = new Models.Approval
+        {
+            ApplicationId = applicationId,
+            ApprovalStatus = "rejected"
+        };
+        var mockedMessage = ServiceBusModelFactory.ServiceBusReceivedMessage(properties: new Dictionary<string, object?>
+        {
+            ["RetryCount"] = 1
+        });
+
+        var exception = new CrmException(HttpStatusCode.InternalServerError.ToString(), HttpStatusCode.InternalServerError, "Test exception");
+
+        var messageRetryContext = A.Fake<IMessageRetryContext>();
+        var mockExportApplication = new Dynamics.ApprovalPayload
+        {
+            ApplicationId = message.ApplicationId,
+            ExportApplicationId = Guid.NewGuid()
+        };
+
+        A.CallTo(() => _retry.Context).Returns(messageRetryContext);
+        A.CallTo(() => messageRetryContext.Message).Returns(mockedMessage);
+
+        A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
+            .ReturnsLazily(() => ToListPagedAsync(mockExportApplication));
+
+        A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default))
+            .ThrowsAsync(exception);
+
+        var test = async () => await _sut.ProcessAsync(message, header);
+
+        // Act
+        var actual = await test.ShouldThrowAsync<CrmException>();
+
+        //Assert
+        actual.ShouldBeSameAs(exception);
     }
 
     [Theory]
