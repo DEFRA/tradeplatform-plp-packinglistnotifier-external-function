@@ -1,4 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿// Copyright DEFRA (c). All rights reserved.
+// Licensed under the Open Government Licence v3.0.
+
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Defra.Trade.Common.Function.Health;

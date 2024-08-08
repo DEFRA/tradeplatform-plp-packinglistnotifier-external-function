@@ -3,16 +3,16 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Common.AppConfig;
+using Defra.Trade.Common.Function.Health.HealthChecks;
 using Defra.Trade.Common.Logging.Extensions;
 using Defra.Trade.Events.IDCOMS.PLNotifier;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Infrastructure;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Defra.Trade.Common.Function.Health.HealthChecks;
 using FunctionHealthCheck;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
