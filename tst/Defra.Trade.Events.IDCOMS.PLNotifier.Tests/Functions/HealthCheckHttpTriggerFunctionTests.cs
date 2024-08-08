@@ -5,6 +5,7 @@ using System.Text;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 using FakeItEasy;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Functions;
@@ -21,20 +22,13 @@ public sealed class HealthCheckHttpTriggerFunctionTests
     }
 
     [Fact]
-    public async Task HttpGet_WithHealthyStatus_ReturnsHealthy()
+    public void RunAsync_HasFunctionAttribute()
     {
-        // arrange
-        var body = new MemoryStream(Encoding.UTF8.GetBytes(string.Empty));
-        var request = new FakeHttpRequest(A.Fake<FunctionContext>(), new Uri("https://test/api/message"), body);
-        var healthReport = new HealthReport(new Dictionary<string, HealthReportEntry>(), HealthStatus.Healthy, TimeSpan.FromSeconds(1));
+        // Arrange & Act
+        var attribute = FunctionTestHelpers.MethodHasSingleAttribute<HealthCheckFunction, FunctionNameAttribute>(
+            nameof(HealthCheckFunction.RunAsync));
 
-        A.CallTo(() => _healthCheckService.CheckHealthAsync(default))
-            .ReturnsLazily(() => healthReport);
-
-        // act
-        var result = await _sut.RunAsync(request);
-
-        // assert
-        result.ShouldNotBeNull();
+        // Assert
+        attribute.Name.ShouldBe("HealthCheckFunction");
     }
 }

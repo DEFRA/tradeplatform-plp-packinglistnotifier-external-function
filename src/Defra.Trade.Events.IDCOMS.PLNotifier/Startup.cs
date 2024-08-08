@@ -9,6 +9,10 @@ using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Infrastructure;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Defra.Trade.Common.Function.Health.HealthChecks;
+using FunctionHealthCheck;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
@@ -27,6 +31,9 @@ public sealed class Startup : FunctionsStartup
             .AddApplication()
             .AddFunctionLogging("PLNotifier");
 
+        var healthChecksBuilder = builder.Services.AddFunctionHealthChecks();
+        RegisterHealthChecks(healthChecksBuilder, builder.Services, configuration);
+
         builder.ConfigureMapper();
     }
 
@@ -38,5 +45,20 @@ public sealed class Startup : FunctionsStartup
                config.UseKeyVaultSecrets = true;
                config.RefreshKeys.Add($"{PlNotifierSettings.PlNotifierSettingsName}:{PlNotifierSettings.AppConfigSentinelName}");
            });
+    }
+
+    private static void RegisterHealthChecks(
+    IHealthChecksBuilder builder,
+    IServiceCollection services,
+    IConfiguration configuration)
+    {
+        builder
+            .AddCheck<AppSettingHealthCheck>("ServiceBus:ConnectionString")
+            .AddCheck<AppSettingHealthCheck>("PLP:Dynamics:Authority")
+            .AddCheck<AppSettingHealthCheck>("PLP:Dynamics:ClientId")
+            .AddCheck<AppSettingHealthCheck>("PLP:Dynamics:ClientSecret")
+            .AddCheck<AppSettingHealthCheck>("PLP:Dynamics:Resource");
+
+        builder.AddAzureServiceBusCheck(configuration, "ServiceBus:ConnectionString", PlNotifierSettings.DefaultQueueName);
     }
 }

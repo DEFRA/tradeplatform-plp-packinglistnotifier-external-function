@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Defra.Trade.Common.Function.Health.Extensions;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 
@@ -25,6 +26,13 @@ public sealed class HealthCheckHttpTriggerFunction
     {
         var healthReport = await _healthCheckService.CheckHealthAsync();
 
-        return new OkObjectResult(Enum.GetName(typeof(HealthStatus), healthReport.Status));
+        if (healthReport.Status == HealthStatus.Healthy)
+        {
+            return new JsonResult("Healthy");
+        }
+
+        var healthCheckResponse = healthReport.ToResponse();
+
+        return new JsonResult(healthCheckResponse);
     }
 }
