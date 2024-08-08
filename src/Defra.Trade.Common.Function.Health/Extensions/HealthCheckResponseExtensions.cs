@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Azure.Management.ContainerService.Fluent.Models;
+﻿// Copyright DEFRA (c). All rights reserved.
+// Licensed under the Open Government Licence v3.0.
+
+using System.Diagnostics.CodeAnalysis;
 
 namespace Defra.Trade.Common.Function.Health.Extensions;
 

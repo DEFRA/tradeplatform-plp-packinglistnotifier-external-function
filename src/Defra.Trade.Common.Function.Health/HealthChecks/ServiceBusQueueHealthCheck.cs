@@ -1,5 +1,8 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿// Copyright DEFRA (c). All rights reserved.
+// Licensed under the Open Government Licence v3.0.
+
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Azure.ServiceBus;
 
 namespace Defra.Trade.Common.Function.Health.HealthChecks;
 

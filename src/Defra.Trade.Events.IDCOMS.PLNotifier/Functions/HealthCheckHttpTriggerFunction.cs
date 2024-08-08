@@ -1,12 +1,12 @@
 // Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government Licence v3.0.
 
+using Defra.Trade.Common.Function.Health.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Defra.Trade.Common.Function.Health.Extensions;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 

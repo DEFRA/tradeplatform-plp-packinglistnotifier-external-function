@@ -4,4 +4,3 @@
 global using AutoMapper;
 global using Dynamics = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Dynamics;
 global using Inbound = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound;
-global using Models = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
