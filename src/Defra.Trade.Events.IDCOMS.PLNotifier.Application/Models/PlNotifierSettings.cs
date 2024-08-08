@@ -30,7 +30,7 @@ public sealed class PlNotifierSettings
 
     public static class MessageRetry
     {
-        public const int MaxRetries = 10;
+        public const int RetryWindowSeconds = 300;
         public const int EnqueueTimeSeconds = 30;
     }
 }

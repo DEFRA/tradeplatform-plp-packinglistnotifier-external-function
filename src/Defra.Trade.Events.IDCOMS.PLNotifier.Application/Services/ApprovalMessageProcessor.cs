@@ -20,6 +20,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
     private readonly TimeSpan messageRetryEnqueueTime;
+    private readonly TimeSpan messageRetryWindow;
     private readonly IMessageRetryContextAccessor _retry;
 
     public ApprovalMessageProcessor(
@@ -34,6 +35,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         _logger = logger;
         _retry = retry;
         messageRetryEnqueueTime = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.EnqueueTimeSeconds);
+        messageRetryWindow = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.RetryWindowSeconds);
     }
 
     public Task<CustomMessageHeader> BuildCustomMessageHeaderAsync() => Task.FromResult(new CustomMessageHeader());
@@ -62,14 +64,22 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 
             _logger.ProcessingNotificationSuccess(message.ApplicationId);
         }
-        catch (ArgumentOutOfRangeException ex) when (_retry.Context is { } context)
+        catch (ArgumentOutOfRangeException ex)
         {
             _logger.MapToDynamicsFailure(ex, message.ApplicationId!);
             throw;
         }
         catch (CrmException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
         {
+            // add new logger retry message in LoggerExtensions
+            // ... _logger.blahblahblah(ex, appId, retryCount)
+
             await RetryMessage(context, ex, message.ApplicationId);
+        }
+        catch (Exception ex)
+        {
+            _logger.ProcessingNotificationFailure(ex, message.ApplicationId!);
+            throw;
         }
 
         return new StatusResponse<Models.Approval>() { ForwardMessage = false, Response = message };
@@ -80,8 +90,9 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     {
         _logger.ProcessingNotificationRetry(ex, applicationId, context.Message.RetryCount());
 
-        await context.RetryMessage(messageRetryEnqueueTime, messageRetryEnqueueTime, ex);
+        await context.RetryMessage(messageRetryWindow, messageRetryEnqueueTime, ex);
     }
+
     public Task<bool> ValidateMessageLabelAsync(TradeEventMessageHeader messageHeader)
         => Task.FromResult(messageHeader.Label!.Equals(Models.PlNotifierHeaderConstants.Label, StringComparison.OrdinalIgnoreCase));
 

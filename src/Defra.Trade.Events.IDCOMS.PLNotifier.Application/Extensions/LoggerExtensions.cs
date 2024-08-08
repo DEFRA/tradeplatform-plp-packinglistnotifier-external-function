@@ -46,9 +46,8 @@ public static partial class LoggerExtensions
     public static partial void ProcessingNotificationSuccess(this ILogger logger, string applicationId);
 
     [LoggerMessage(EventId = 22, EventName = nameof(ProcessingNotificationFailure), Level = LogLevel.Error, Message = "Failed to process PL notification for application Id : {ApplicationId}")]
-    public static partial void ProcessingNotificationFailure(this ILogger logger, Exception ex, string applicationId, int retryCount);
+    public static partial void ProcessingNotificationFailure(this ILogger logger, Exception ex, string applicationId);
 
     [LoggerMessage(EventId = 23, EventName = nameof(ProcessingNotificationRetry), Level = LogLevel.Error, Message = "Failed to process PL notification for application Id : {ApplicationId} attempting to retry message with retry count of {RetryCount}")]
     public static partial void ProcessingNotificationRetry(this ILogger logger, Exception ex, string applicationId, int retryCount);
 }
-

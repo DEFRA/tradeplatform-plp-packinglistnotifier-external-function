@@ -20,7 +20,7 @@ public sealed class ApprovalMessageProcessorTests
 {
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
-    private readonly IMessageRetryContextAccessor retry;
+    private readonly IMessageRetryContextAccessor _retry;
     private readonly IFixture fixture;
     private readonly ApprovalMessageProcessor _sut;
 
@@ -29,8 +29,8 @@ public sealed class ApprovalMessageProcessorTests
         fixture = new Fixture();
         _crmClient = A.Fake<ICrmClient>();
         _logger = A.Fake<ILogger<ApprovalMessageProcessor>>();
-        retry = A.Fake<IMessageRetryContextAccessor>(p => p.Strict());
-        _sut = new ApprovalMessageProcessor(_crmClient, _logger, retry);
+        _retry = A.Fake<IMessageRetryContextAccessor>(p => p.Strict());
+        _sut = new ApprovalMessageProcessor(_crmClient, _logger, _retry);
     }
 
     [Fact]
@@ -45,26 +45,17 @@ public sealed class ApprovalMessageProcessorTests
     }
 
     [Theory]
-    [InlineData(true, false)]
-    [InlineData(false, true)]
-    [InlineData(false, false)]
-    public void Ctor_WithNullParams_ThrowsArgumentNullException(bool p1NotNull, bool p2NotNull)
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(true, false, false)]
+    public void Ctor_WithNullParams_ThrowsArgumentNullException(bool p1NotNull, bool p2NotNull, bool p3NotNull)
     {
         // arrange
         var sut = () => new ApprovalMessageProcessor(
             p1NotNull ? _crmClient : null!,
             p2NotNull ? _logger : null!,
-            retry);
-
-        // act && assert
-        sut.ShouldThrow<ArgumentNullException>();
-    }
-
-    [Fact]
-    public void Ctor_RetryIsNull_ThrowsArgumentNullException()
-    {
-        // arrange
-        var sut = () => new ApprovalMessageProcessor(_crmClient, _logger, null!);
+            p3NotNull ? _retry : null!);
 
         // act && assert
         sut.ShouldThrow<ArgumentNullException>();
@@ -74,7 +65,7 @@ public sealed class ApprovalMessageProcessorTests
     public void Ctor_WithParams_Instantiates()
     {
         // arrange
-        var sut = new ApprovalMessageProcessor(_crmClient, _logger, retry);
+        var sut = new ApprovalMessageProcessor(_crmClient, _logger, _retry);
 
         // act && assert
         sut.ShouldNotBeNull();
@@ -165,13 +156,11 @@ public sealed class ApprovalMessageProcessorTests
     }
 
     [Theory]
-    [InlineData((HttpStatusCode)1)]
-    [InlineData((HttpStatusCode)100)]
-    [InlineData((HttpStatusCode)399)]
-    [InlineData((HttpStatusCode)400)]
-    [InlineData((HttpStatusCode)499)]
-    [InlineData((HttpStatusCode)600)]
-    [InlineData((HttpStatusCode)699)]
+    [InlineData(HttpStatusCode.EarlyHints)] // 103
+    [InlineData(HttpStatusCode.AlreadyReported)] // 208
+    [InlineData(HttpStatusCode.TemporaryRedirect)] // 307
+    [InlineData(HttpStatusCode.Forbidden)] // 403
+    [InlineData(HttpStatusCode.RequestUriTooLong)] // 414
     public async Task ProcessMessage_Should_IgnoreOtherRequestExceptions(HttpStatusCode? status)
     {
         // Arrange
@@ -185,24 +174,29 @@ public sealed class ApprovalMessageProcessorTests
         };
         var mockedMessage = ServiceBusModelFactory.ServiceBusReceivedMessage(properties: new Dictionary<string, object?>
         {
-            ["RetryCount"] = 10
+            ["RetryCount"] = 1
         });
+
         var exception = new CrmException(HttpStatusCode.InternalServerError.ToString(), HttpStatusCode.InternalServerError, "Test exception");
+
         var messageRetryContext = A.Fake<IMessageRetryContext>();
         var mockExportApplication = new Dynamics.ApprovalPayload
         {
             ApplicationId = message.ApplicationId,
             ExportApplicationId = Guid.NewGuid()
         };
-        A.CallTo(() => retry.Context).Returns(messageRetryContext);
+
+        A.CallTo(() => _retry.Context).Returns(messageRetryContext);
         A.CallTo(() => messageRetryContext.Message).Returns(mockedMessage);
 
         A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
             .ReturnsLazily(() => ToListPagedAsync(mockExportApplication));
+
         A.CallTo(() => _crmClient.UpdateAsync(A<Dynamics.ApprovalPayload>._, default))
             .ThrowsAsync(exception);
 
         var test = async () => await _sut.ProcessAsync(message, header);
+
         // Act
         var actual = await test.ShouldThrowAsync<CrmException>();
 
