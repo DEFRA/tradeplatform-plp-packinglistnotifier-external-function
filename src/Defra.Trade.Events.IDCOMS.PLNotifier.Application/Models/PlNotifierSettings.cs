@@ -8,8 +8,7 @@ namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 [ExcludeFromCodeCoverage(Justification = "No value in covering startup")]
 public sealed class PlNotifierSettings
 {
-    // TODO
-    public const string PlNotifierSettingsName = "TBC";
+    public const string PlNotifierSettingsName = "PLP";
 
 #if DEBUG
 
