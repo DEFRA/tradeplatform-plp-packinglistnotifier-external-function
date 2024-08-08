@@ -45,6 +45,11 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     public async Task<StatusResponse<Models.Approval>> ProcessAsync(Models.Approval message, TradeEventMessageHeader messageHeader)
     {
         _logger.ProcessingNotification(message.ApplicationId!);
+        if (string.IsNullOrWhiteSpace(message.ApplicationId))
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
+
         return await ProcessInternalAsync(message, messageHeader);
     }
 
@@ -52,17 +57,12 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         Models.Approval message,
         TradeEventMessageHeader messageHeader)
     {
-        if (string.IsNullOrWhiteSpace(message.ApplicationId))
-        {
-            throw new ArgumentNullException(nameof(message));
-        }
-
         try
         {
             var dynamicsPayload = MapToDynamics(message);
             await SendToDynamics(dynamicsPayload);
 
-            _logger.ProcessingNotificationSuccess(message.ApplicationId);
+            _logger.ProcessingNotificationSuccess(message.ApplicationId!);
         }
         catch (ArgumentOutOfRangeException ex)
         {
@@ -71,7 +71,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         }
         catch (CrmException ex) when (ex.StatusCode is null or 0 or (>= (HttpStatusCode)500 and <= (HttpStatusCode)599) && _retry.Context is { } context)
         {
-            await RetryMessage(context, ex, message.ApplicationId);
+            await RetryMessage(context, ex, message.ApplicationId!);
         }
         catch (Exception ex)
         {

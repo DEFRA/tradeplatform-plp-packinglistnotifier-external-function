@@ -155,13 +155,8 @@ public sealed class ApprovalMessageProcessorTests
         result.Message.ShouldBe("Specified argument was out of the range of valid values. (Parameter 'message')");
     }
 
-    [Theory]
-    [InlineData(HttpStatusCode.EarlyHints)] // 103
-    [InlineData(HttpStatusCode.AlreadyReported)] // 208
-    [InlineData(HttpStatusCode.TemporaryRedirect)] // 307
-    [InlineData(HttpStatusCode.Forbidden)] // 403
-    [InlineData(HttpStatusCode.RequestUriTooLong)] // 414
-    public async Task ProcessMessage_Should_IgnoreOtherRequestExceptions(HttpStatusCode? status)
+    [Fact]
+    public async Task ProcessMessage_Should_IgnoreOtherRequestExceptions()
     {
         // Arrange
         var applicationId = $"someReference {Guid.NewGuid()}";
