@@ -13,6 +13,7 @@ using ExecutionContext = Microsoft.Azure.WebJobs.ExecutionContext;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
 using Approval = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound.Approval;
+
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Functions;
 
 public class PlNotifierServiceBusTriggerFunctionTests
@@ -69,7 +70,7 @@ public class PlNotifierServiceBusTriggerFunctionTests
         setRetryContext.DoesNothing();
 
         // act
-        await sut.Run(message, actions, context, eventStore, retryQueue, logger);
+        await sut.RunAsync(message, actions, context, eventStore, retryQueue, logger);
 
         // assert
         setRetryContext.MustHaveHappenedOnceExactly()
@@ -116,7 +117,7 @@ public class PlNotifierServiceBusTriggerFunctionTests
         setRetryContext.DoesNothing();
 
         // act
-        await sut.Run(message, actions, context, eventStore, retryQueue, logger);
+        await sut.RunAsync(message, actions, context, eventStore, retryQueue, logger);
 
         // assert
         setRetryContext.MustHaveHappenedOnceExactly();

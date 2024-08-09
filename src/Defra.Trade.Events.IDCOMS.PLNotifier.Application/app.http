@@ -1,0 +1,6 @@
+@HostAddress=http://localhost
+@Port=7130
+@Path=api/health
+
+GET {{HostAddress}}:{{Port}}/{{Path}}
+Accept: text/plain

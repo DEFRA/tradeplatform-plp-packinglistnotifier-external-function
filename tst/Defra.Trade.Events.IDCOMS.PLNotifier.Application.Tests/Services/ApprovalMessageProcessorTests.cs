@@ -21,12 +21,10 @@ public sealed class ApprovalMessageProcessorTests
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
     private readonly IMessageRetryContextAccessor _retry;
-    private readonly IFixture fixture;
     private readonly ApprovalMessageProcessor _sut;
 
     public ApprovalMessageProcessorTests()
     {
-        fixture = new Fixture();
         _crmClient = A.Fake<ICrmClient>();
         _logger = A.Fake<ILogger<ApprovalMessageProcessor>>();
         _retry = A.Fake<IMessageRetryContextAccessor>(p => p.Strict());
@@ -256,15 +254,6 @@ public sealed class ApprovalMessageProcessorTests
         result.ShouldBeTrue();
     }
 
-    private static async IAsyncEnumerable<IEnumerable<Dynamics.ApprovalPayload>> ToListPagedAsync(Dynamics.ApprovalPayload payload)
-    {
-        var page = new List<Dynamics.ApprovalPayload>() { payload };
-
-        yield return page;
-
-        await Task.CompletedTask;
-    }
-
     private static TradeEventMessageHeader GetValidTradeEventMessageHeader(string entityKey = null!)
     {
         return new TradeEventMessageHeader
@@ -281,5 +270,14 @@ public sealed class ApprovalMessageProcessorTests
             TimestampUtc = 1704067200,
             Type = Common.Functions.Models.Enum.EventType.Internal
         };
+    }
+
+    private static async IAsyncEnumerable<IEnumerable<Dynamics.ApprovalPayload>> ToListPagedAsync(Dynamics.ApprovalPayload payload)
+    {
+        var page = new List<Dynamics.ApprovalPayload>() { payload };
+
+        yield return page;
+
+        await Task.CompletedTask;
     }
 }
