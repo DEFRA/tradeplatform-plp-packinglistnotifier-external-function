@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Defra.Trade.Common" Version="3.0.0" />
     <PackageReference Include="Defra.Trade.Common.Security" Version="2.0.5" />
-    <PackageReference Include="Defra.Trade.Crm" Version="3.0.0" />
     <PackageReference Include="FunctionHealthCheck" Version="1.0.0" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
