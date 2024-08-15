@@ -32,7 +32,7 @@ public sealed class Startup : FunctionsStartup
             .AddFunctionLogging("PLNotifier");
 
         var healthChecksBuilder = builder.Services.AddFunctionHealthChecks();
-        RegisterHealthChecks(healthChecksBuilder, configuration);
+        RegisterHealthChecks(healthChecksBuilder, builder.Services, configuration);
 
         builder.ConfigureMapper();
     }
@@ -48,8 +48,9 @@ public sealed class Startup : FunctionsStartup
     }
 
     private static void RegisterHealthChecks(
-    IHealthChecksBuilder builder,
-    IConfiguration configuration)
+        IHealthChecksBuilder builder,
+        IServiceCollection services,
+        IConfiguration configuration)
     {
         builder
             .AddCheck<AppSettingHealthCheck>("ServiceBus:ConnectionString")
@@ -58,6 +59,11 @@ public sealed class Startup : FunctionsStartup
             .AddCheck<AppSettingHealthCheck>("PLP:Dynamics:ClientSecret")
             .AddCheck<AppSettingHealthCheck>("PLP:Dynamics:Resource");
 
-        builder.AddAzureServiceBusCheck(configuration, "ServiceBus:ConnectionString", PlNotifierSettings.DefaultQueueName);
+        builder.AddAzureServiceBusCheck(
+            configuration,
+            "ServiceBus:ConnectionString",
+            PlNotifierSettings.DefaultQueueName);
+
+        builder.AddDynamicsCheck(services.BuildServiceProvider());
     }
 }

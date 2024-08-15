@@ -9,7 +9,7 @@ namespace Defra.Trade.Common.Function.Health.HealthChecks;
 /// <summary>
 /// Health check for Trade Api,
 /// </summary>
-[ExcludeFromCodeCoverage]
+[ExcludeFromCodeCoverage(Justification = "Namespace to be tested within and moved to nuget")]
 public class ServiceBusQueueHealthCheck : IHealthCheck
 {
     private readonly string _queueName;
@@ -47,10 +47,8 @@ public class ServiceBusQueueHealthCheck : IHealthCheck
         return result;
     }
 
-#pragma warning disable IDE0060 // Remove unused parameter
-
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Not yet used")]
     protected Task<HealthCheckResult> CheckHealthInternalAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-#pragma warning restore IDE0060 // Remove unused parameter
     {
         try
         {
