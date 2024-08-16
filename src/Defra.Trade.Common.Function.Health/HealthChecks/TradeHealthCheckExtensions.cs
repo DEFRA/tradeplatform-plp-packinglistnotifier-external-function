@@ -9,10 +9,10 @@ namespace Defra.Trade.Common.Function.Health.HealthChecks;
 public static class TradeHealthCheckExtensions
 {
     public static IHealthChecksBuilder AddAzureServiceBusCheck(
-    this IHealthChecksBuilder builder,
-    IConfiguration configuration,
-    string serviceBusConnectionConfigPath,
-    string queueName)
+        this IHealthChecksBuilder builder,
+        IConfiguration configuration,
+        string serviceBusConnectionConfigPath,
+        string queueName)
     {
         var servicesBusConnectionString = configuration.GetValue<string>(serviceBusConnectionConfigPath);
         var servicesBusQueueName = queueName;
@@ -23,6 +23,20 @@ public static class TradeHealthCheckExtensions
             failureStatus: default,
             tags: default,
             timeout: default));
+        return builder;
+    }
+
+    public static IHealthChecksBuilder AddDynamicsCheck(
+        this IHealthChecksBuilder builder,
+        ServiceProvider serviceProvider)
+    {
+        builder.Add(new HealthCheckRegistration(
+            "Dynamics",
+            sp => new DynamicsHealthCheck(serviceProvider),
+            failureStatus: default,
+            tags: default,
+            timeout: default));
+
         return builder;
     }
 }

@@ -18,4 +18,8 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Defra.Trade.Events.IDCOMS.PLNotifier.Application\Defra.Trade.Events.IDCOMS.PLNotifier.Application.csproj" />
+  </ItemGroup>
+
 </Project>
