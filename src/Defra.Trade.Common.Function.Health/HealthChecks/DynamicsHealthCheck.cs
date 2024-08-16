@@ -34,9 +34,7 @@ public class DynamicsHealthCheck : IHealthCheck
             var name = context.Registration.Name;
             var dynamicsAuthenticator = _serviceProvider.GetRequiredService<IDynamicsClientAuthenticator>();
             var dynamicsApiConfig = _serviceProvider.GetRequiredService<IOptions<DynamicsClientConfig>>();
-            // TODO use URI builder
             var dynamicsEndpoint = $"{dynamicsApiConfig.Value.Resource}{dynamicsApiConfig.Value.Path}{dynamicsApiConfig.Value.Query}";
-
             var authToken = await dynamicsAuthenticator.GenerateAuthenticationTokenAsync();
 
             var apiClient = new HttpClient();
