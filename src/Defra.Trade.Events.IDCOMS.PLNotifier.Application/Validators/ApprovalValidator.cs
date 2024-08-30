@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using Defra.Trade.Common.Functions.Validation;
 using FluentValidation;
@@ -8,7 +8,7 @@ namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 
 public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
 {
-    private readonly List<string> _approvalStatus = new() { "approved", "rejected" };
+    private readonly List<string> _approvalStatus = ["approved", "rejected"];
 
     public ApprovalValidator()
     {

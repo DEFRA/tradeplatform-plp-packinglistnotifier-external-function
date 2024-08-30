@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.ServiceBus;
@@ -10,16 +10,10 @@ namespace Defra.Trade.Common.Function.Health.HealthChecks;
 /// Health check for Trade Api,
 /// </summary>
 [ExcludeFromCodeCoverage(Justification = "Namespace to be tested within and moved to nuget")]
-public class ServiceBusQueueHealthCheck : IHealthCheck
+public class ServiceBusQueueHealthCheck(string serviceBusConConfig, string queueName) : IHealthCheck
 {
-    private readonly string _queueName;
-    private readonly string _serviceBusConConfig;
-
-    public ServiceBusQueueHealthCheck(string serviceBusConConfig, string queueName)
-    {
-        _queueName = queueName;
-        _serviceBusConConfig = serviceBusConConfig;
-    }
+    private readonly string _queueName = queueName;
+    private readonly string _serviceBusConConfig = serviceBusConConfig;
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
@@ -52,7 +46,7 @@ public class ServiceBusQueueHealthCheck : IHealthCheck
     {
         try
         {
-            var name = context.Registration.Name;
+            string name = context.Registration.Name;
             var client = CreateQueueClient(_serviceBusConConfig);
             _ = client.ServiceBusConnection.Endpoint;
             return Task.FromResult(HealthCheckResult.Healthy($"{name} Service bus connection successful."));

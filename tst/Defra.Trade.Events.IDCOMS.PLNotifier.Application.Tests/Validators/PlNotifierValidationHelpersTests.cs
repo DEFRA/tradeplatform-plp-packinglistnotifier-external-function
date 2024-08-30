@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
@@ -13,10 +13,10 @@ public sealed class PlNotifierValidationHelpersTests
     public void BeAGuid_WithGuid_ReturnsTrue()
     {
         // arrange
-        var input = Guid.NewGuid().ToString();
+        string input = Guid.NewGuid().ToString();
 
         // act
-        var result = PlNotifierValidationHelpers.BeAGuid(input);
+        bool result = PlNotifierValidationHelpers.BeAGuid(input);
 
         // assert
         result.ShouldBeTrue();
@@ -26,10 +26,10 @@ public sealed class PlNotifierValidationHelpersTests
     public void BeAGuid_WithNonGuid_ReturnsFalse()
     {
         // arrange
-        var input = "notAGuid";
+        string input = "notAGuid";
 
         // act
-        var result = PlNotifierValidationHelpers.BeAGuid(input);
+        bool result = PlNotifierValidationHelpers.BeAGuid(input);
 
         // assert
         result.ShouldBeFalse();
