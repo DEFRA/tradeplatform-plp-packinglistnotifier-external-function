@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Common.Function.Health.DynamicsClient;
@@ -31,10 +31,10 @@ public class DynamicsHealthCheck : IHealthCheck
     {
         try
         {
-            var name = context.Registration.Name;
+            string name = context.Registration.Name;
             var dynamicsAuthenticator = _serviceProvider.GetRequiredService<IDynamicsClientAuthenticator>();
             var dynamicsApiConfig = _serviceProvider.GetRequiredService<IOptions<DynamicsClientConfig>>();
-            var dynamicsEndpoint = $"{dynamicsApiConfig.Value.Resource}{dynamicsApiConfig.Value.Path}{dynamicsApiConfig.Value.Query}";
+            string dynamicsEndpoint = $"{dynamicsApiConfig.Value.Resource}{dynamicsApiConfig.Value.Path}{dynamicsApiConfig.Value.Query}";
             var authToken = await dynamicsAuthenticator.GenerateAuthenticationTokenAsync();
 
             var apiClient = new HttpClient();

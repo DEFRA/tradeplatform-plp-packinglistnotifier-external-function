@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
@@ -28,7 +28,7 @@ public sealed class DynamicsClientAuthenticator : IDynamicsClientAuthenticator
     {
         using var client = new HttpClient();
 
-        var baseAddress = $"{_dynamicsClientOptions.Authority}/oauth2/token";
+        string baseAddress = $"{_dynamicsClientOptions.Authority}/oauth2/token";
         const string grantType = "client_credentials";
         var form = new Dictionary<string, string>
         {
@@ -40,7 +40,7 @@ public sealed class DynamicsClientAuthenticator : IDynamicsClientAuthenticator
 
         using var uriContext = new FormUrlEncodedContent(form);
         var tokenResponse = await client.PostAsync(baseAddress, uriContext);
-        var jsonContent = await tokenResponse.Content.ReadAsStringAsync();
+        string jsonContent = await tokenResponse.Content.ReadAsStringAsync();
 
         tokenResponse.EnsureSuccessStatusCode();
 

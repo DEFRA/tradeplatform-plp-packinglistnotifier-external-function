@@ -1,10 +1,9 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
-
-using Defra.Trade.Common.Functions.Extensions;
 using System.Net;
+using Defra.Trade.Common.Functions.Extensions;
 using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions.Models;
 using Defra.Trade.Crm;
@@ -19,8 +18,8 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 {
     private readonly ICrmClient _crmClient;
     private readonly ILogger<ApprovalMessageProcessor> _logger;
-    private readonly TimeSpan messageRetryEnqueueTime;
-    private readonly TimeSpan messageRetryWindow;
+    private readonly TimeSpan _messageRetryEnqueueTime;
+    private readonly TimeSpan _messageRetryWindow;
     private readonly IMessageRetryContextAccessor _retry;
 
     public ApprovalMessageProcessor(
@@ -34,8 +33,8 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         _crmClient = crmClient;
         _logger = logger;
         _retry = retry;
-        messageRetryEnqueueTime = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.EnqueueTimeSeconds);
-        messageRetryWindow = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.RetryWindowSeconds);
+        _messageRetryEnqueueTime = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.EnqueueTimeSeconds);
+        _messageRetryWindow = new TimeSpan(0, 0, 0, PlNotifierSettings.MessageRetry.RetryWindowSeconds);
     }
 
     public Task<CustomMessageHeader> BuildCustomMessageHeaderAsync() => Task.FromResult(new CustomMessageHeader());
@@ -50,12 +49,10 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
             throw new ArgumentNullException(nameof(message));
         }
 
-        return await ProcessInternalAsync(message, messageHeader);
+        return await ProcessInternalAsync(message);
     }
 
-    public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(
-        Models.Approval message,
-        TradeEventMessageHeader messageHeader)
+    public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(Models.Approval message)
     {
         try
         {
@@ -87,7 +84,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     {
         _logger.ProcessingNotificationRetry(ex, applicationId, context.Message.RetryCount());
 
-        await context.RetryMessage(messageRetryWindow, messageRetryEnqueueTime, ex);
+        await context.RetryMessage(_messageRetryWindow, _messageRetryEnqueueTime, ex);
     }
 
     public Task<bool> ValidateMessageLabelAsync(TradeEventMessageHeader messageHeader)
@@ -115,11 +112,10 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         return payload;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Bug", "S1751:Loops with at most one iteration should be refactored", Justification = "Crm client library only provides IAsyncEnumerator for get action, and only 1 result is possible")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Bug", "S1751:Loops with at most one iteration should be refactored", Justification = "Crm client library only provides IAsyncEnumerator for get action, and only 1 result is possible in this context")]
     private async Task SendToDynamics(Dynamics.ApprovalPayload payload)
     {
         _logger.SendPayload(payload.ApplicationId!);
-
         _logger.GetExportApplicationId(payload.ApplicationId!);
 
         var exportAppEnumerator = _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>($"trd_applicationreference eq '{payload.ApplicationId}'", default);

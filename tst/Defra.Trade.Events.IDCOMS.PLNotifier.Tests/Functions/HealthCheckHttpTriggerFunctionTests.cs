@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Text;
 using Defra.Trade.Common.Function.Health;
@@ -43,7 +43,7 @@ public sealed class HealthCheckHttpTriggerFunctionTests
         FunctionTestHelpers.Function_HasHttpTriggerAttributeWithCorrectValues<HealthCheckHttpTriggerFunction>(
             nameof(HealthCheckHttpTriggerFunction.RunAsync),
             "health",
-            new[] { "GET" },
+            ["GET"],
             AuthorizationLevel.Anonymous);
     }
 

@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -76,7 +76,7 @@ public sealed class ApprovalMessageProcessorTests
         var header = new TradeEventMessageHeader();
 
         // act
-        var result = await _sut.GetSchemaAsync(header);
+        string result = await _sut.GetSchemaAsync(header);
 
         // assert
         result.ShouldBe(string.Empty);
@@ -86,7 +86,7 @@ public sealed class ApprovalMessageProcessorTests
     public async Task ProcessAsync_WithAnyException_ThrowsTheException()
     {
         // arrange
-        var applicationId = $"someReference {Guid.NewGuid()}";
+        string applicationId = $"someReference {Guid.NewGuid()}";
         var header = GetValidTradeEventMessageHeader(applicationId);
 
         var message = new Models.Approval
@@ -107,7 +107,7 @@ public sealed class ApprovalMessageProcessorTests
     public async Task ProcessAsync_WithDynamicsError_ThrowsCrmException()
     {
         // arrange
-        var applicationId = $"someReference {Guid.NewGuid()}";
+        string applicationId = $"someReference {Guid.NewGuid()}";
         var header = GetValidTradeEventMessageHeader(applicationId);
 
         var message = new Models.Approval
@@ -139,7 +139,7 @@ public sealed class ApprovalMessageProcessorTests
     public async Task ProcessAsync_WithInvalidApprovalStatus_ThrowsArgumentOutOfRangeException()
     {
         // arrange
-        var applicationId = $"someReference {Guid.NewGuid()}";
+        string applicationId = $"someReference {Guid.NewGuid()}";
         var header = GetValidTradeEventMessageHeader(applicationId);
 
         var message = new Models.Approval
@@ -157,7 +157,7 @@ public sealed class ApprovalMessageProcessorTests
     public async Task ProcessMessage_Should_IgnoreOtherRequestExceptions()
     {
         // Arrange
-        var applicationId = $"someReference {Guid.NewGuid()}";
+        string applicationId = $"someReference {Guid.NewGuid()}";
         var header = GetValidTradeEventMessageHeader(applicationId);
 
         var message = new Models.Approval
@@ -205,7 +205,7 @@ public sealed class ApprovalMessageProcessorTests
     public async Task ProcessAsync_WithValidParams_SendsToDynamics(string approvalStatus)
     {
         // arrange
-        var applicationId = $"someReference {Guid.NewGuid()}";
+        string applicationId = $"someReference {Guid.NewGuid()}";
         var header = GetValidTradeEventMessageHeader(applicationId);
 
         var message = new Models.Approval
@@ -248,7 +248,7 @@ public sealed class ApprovalMessageProcessorTests
         };
 
         // assert
-        var result = await _sut.ValidateMessageLabelAsync(header);
+        bool result = await _sut.ValidateMessageLabelAsync(header);
 
         // arrange
         result.ShouldBeTrue();

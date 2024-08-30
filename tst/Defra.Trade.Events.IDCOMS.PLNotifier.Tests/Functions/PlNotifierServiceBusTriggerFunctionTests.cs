@@ -1,41 +1,41 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using Azure.Messaging.ServiceBus;
-using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Common.Functions;
-using FakeItEasy;
-using Microsoft.Azure.WebJobs.ServiceBus;
-using Microsoft.Azure.WebJobs;
-using Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
-using Microsoft.Extensions.Logging;
-using ExecutionContext = Microsoft.Azure.WebJobs.ExecutionContext;
+using Defra.Trade.Common.Functions.Interfaces;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
+using Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
+using FakeItEasy;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.ServiceBus;
+using Microsoft.Extensions.Logging;
 using Approval = Defra.Trade.Events.IDCOMS.PLNotifier.Application.Dtos.Inbound.Approval;
+using ExecutionContext = Microsoft.Azure.WebJobs.ExecutionContext;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Functions;
 
 public class PlNotifierServiceBusTriggerFunctionTests
 {
-    private readonly IBaseMessageProcessorService<Approval> processor;
-    private readonly IMessageRetryService retry;
-    private readonly PlNotifierServiceBusTriggerFunction sut;
+    private readonly IBaseMessageProcessorService<Approval> _processor;
+    private readonly IMessageRetryService _retry;
+    private readonly PlNotifierServiceBusTriggerFunction _sut;
 
     public PlNotifierServiceBusTriggerFunctionTests()
     {
-        processor = A.Fake<IBaseMessageProcessorService<Approval>>(opt => opt.Strict());
-        retry = A.Fake<IMessageRetryService>(opt => opt.Strict());
-        sut = new PlNotifierServiceBusTriggerFunction(processor, retry);
+        _processor = A.Fake<IBaseMessageProcessorService<Approval>>(opt => opt.Strict());
+        _retry = A.Fake<IMessageRetryService>(opt => opt.Strict());
+        _sut = new PlNotifierServiceBusTriggerFunction(_processor, _retry);
     }
 
     [Fact]
     public async Task RunAsync_CallsTheProcessorWithTheCorrectArguments()
     {
         // arrange
-        var messageId = Guid.NewGuid().ToString();
+        string messageId = Guid.NewGuid().ToString();
         var invocationId = Guid.NewGuid();
-        var functionName = Guid.NewGuid().ToString();
+        string functionName = Guid.NewGuid().ToString();
         var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString("{\"GCId\": \"123\"}"));
 
         var actions = A.Fake<ServiceBusMessageActions>(opt => opt.Strict());
@@ -44,8 +44,8 @@ public class PlNotifierServiceBusTriggerFunctionTests
         var retryQueue = A.Fake<IAsyncCollector<ServiceBusMessage>>(opt => opt.Strict());
         var logger = A.Fake<ILogger>();
 
-        var setRetryContext = A.CallTo(() => retry.SetContext(message, retryQueue));
-        var processAsyncCall = A.CallTo(() => processor.ProcessAsync(
+        var setRetryContext = A.CallTo(() => _retry.SetContext(message, retryQueue));
+        var processAsyncCall = A.CallTo(() => _processor.ProcessAsync(
             invocationId.ToString(),
             PlNotifierSettings.DefaultQueueName,
             PlNotifierSettings.PublisherId,
@@ -70,7 +70,7 @@ public class PlNotifierServiceBusTriggerFunctionTests
         setRetryContext.DoesNothing();
 
         // act
-        await sut.RunAsync(message, actions, context, eventStore, retryQueue, logger);
+        await _sut.RunAsync(message, actions, context, eventStore, retryQueue, logger);
 
         // assert
         setRetryContext.MustHaveHappenedOnceExactly()
@@ -81,9 +81,9 @@ public class PlNotifierServiceBusTriggerFunctionTests
     public async Task RunAsync_LogsWhenTheProcessorThrows()
     {
         // arrange
-        var messageId = Guid.NewGuid().ToString();
+        string messageId = Guid.NewGuid().ToString();
         var invocationId = Guid.NewGuid();
-        var functionName = Guid.NewGuid().ToString();
+        string functionName = Guid.NewGuid().ToString();
         var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId);
         var actions = A.Fake<ServiceBusMessageActions>(opt => opt.Strict());
         var context = new ExecutionContext { InvocationId = invocationId, FunctionName = functionName };
@@ -92,8 +92,8 @@ public class PlNotifierServiceBusTriggerFunctionTests
         var logger = A.Fake<ILogger>();
         var exception = new Exception("abc");
 
-        var setRetryContext = A.CallTo(() => retry.SetContext(message, retryQueue));
-        var processAsyncCall = A.CallTo(() => processor.ProcessAsync(
+        var setRetryContext = A.CallTo(() => _retry.SetContext(message, retryQueue));
+        var processAsyncCall = A.CallTo(() => _processor.ProcessAsync(
             invocationId.ToString(),
             PlNotifierSettings.DefaultQueueName,
             PlNotifierSettings.PublisherId,
@@ -117,7 +117,7 @@ public class PlNotifierServiceBusTriggerFunctionTests
         setRetryContext.DoesNothing();
 
         // act
-        await sut.RunAsync(message, actions, context, eventStore, retryQueue, logger);
+        await _sut.RunAsync(message, actions, context, eventStore, retryQueue, logger);
 
         // assert
         setRetryContext.MustHaveHappenedOnceExactly();
