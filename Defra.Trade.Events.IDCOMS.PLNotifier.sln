@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelines", "pipelines", "{986D10D4-0672-4E33-AE03-992A15098289}"
 	ProjectSection(SolutionItems) = preProject
-		build.yaml = build.yaml
+		pipelines\build.yaml = pipelines\build.yaml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Events.IDCOMS.PLNotifier", "src\Defra.Trade.Events.IDCOMS.PLNotifier\Defra.Trade.Events.IDCOMS.PLNotifier.csproj", "{FDFEAE45-3BEB-4C4E-BFC5-3166B43BF368}"
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Events.IDCOMS.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Events.IDCOMS.PLNotifier.Tests", "tst\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj", "{5FADCCA1-A5F1-4DB2-B690-C4F3157742E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Defra.Trade.Common.Function.Health", "src\Defra.Trade.Common.Function.Health\Defra.Trade.Common.Function.Health.csproj", "{3F54885B-0074-4F4F-8C55-47F0F28D1A28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Common.Function.Health", "src\Defra.Trade.Common.Function.Health\Defra.Trade.Common.Function.Health.csproj", "{3F54885B-0074-4F4F-8C55-47F0F28D1A28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

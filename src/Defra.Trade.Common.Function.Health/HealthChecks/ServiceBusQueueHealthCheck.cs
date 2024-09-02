@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.ServiceBus;
@@ -9,17 +9,11 @@ namespace Defra.Trade.Common.Function.Health.HealthChecks;
 /// <summary>
 /// Health check for Trade Api,
 /// </summary>
-[ExcludeFromCodeCoverage]
-public class ServiceBusQueueHealthCheck : IHealthCheck
+[ExcludeFromCodeCoverage(Justification = "Namespace to be tested within and moved to nuget")]
+public class ServiceBusQueueHealthCheck(string serviceBusConConfig, string queueName) : IHealthCheck
 {
-    private readonly string _queueName;
-    private readonly string _serviceBusConConfig;
-
-    public ServiceBusQueueHealthCheck(string serviceBusConConfig, string queueName)
-    {
-        _queueName = queueName;
-        _serviceBusConConfig = serviceBusConConfig;
-    }
+    private readonly string _queueName = queueName;
+    private readonly string _serviceBusConConfig = serviceBusConConfig;
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
@@ -47,14 +41,12 @@ public class ServiceBusQueueHealthCheck : IHealthCheck
         return result;
     }
 
-#pragma warning disable IDE0060 // Remove unused parameter
-
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Not yet used")]
     protected Task<HealthCheckResult> CheckHealthInternalAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-#pragma warning restore IDE0060 // Remove unused parameter
     {
         try
         {
-            var name = context.Registration.Name;
+            string name = context.Registration.Name;
             var client = CreateQueueClient(_serviceBusConConfig);
             _ = client.ServiceBusConnection.Endpoint;
             return Task.FromResult(HealthCheckResult.Healthy($"{name} Service bus connection successful."));

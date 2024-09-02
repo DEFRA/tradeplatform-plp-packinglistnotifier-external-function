@@ -1,8 +1,9 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Common.Config;
+using Defra.Trade.Common.Function.Health.DynamicsClient;
 using Defra.Trade.Common.Functions;
 using Defra.Trade.Common.Functions.EventStore;
 using Defra.Trade.Common.Functions.Interfaces;
@@ -29,7 +30,8 @@ public static class ServiceRegistrations
             .AddValidators()
             .AddEventStore()
             .AddProcessor()
-            .AddConfigurations(configuration);
+            .AddConfigurations(configuration)
+            .AddDynamicsHealthCheckDependencies(configuration);
     }
 
     private static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
@@ -43,12 +45,13 @@ public static class ServiceRegistrations
         return services;
     }
 
-    private static IServiceCollection AddMessageRetryService(this IServiceCollection services)
+    private static IServiceCollection AddDynamicsHealthCheckDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        return services
-            .AddSingleton<MessageRetryService>()
-            .AddSingleton<IMessageRetryService>(p => p.GetRequiredService<MessageRetryService>())
-            .AddSingleton<IMessageRetryContextAccessor>(p => p.GetRequiredService<MessageRetryService>());
+        services.AddTransient<IDynamicsClientAuthenticator, DynamicsClientAuthenticator>();
+
+        var apiConfig = configuration.GetSection("PLP:Dynamics");
+        services.AddOptions<DynamicsClientConfig>().Bind(apiConfig);
+        return services;
     }
 
     private static IServiceCollection AddEventStore(this IServiceCollection services)
@@ -56,6 +59,14 @@ public static class ServiceRegistrations
         return services
             .AddEventStoreConfiguration()
             .AddSingleton<IMessageCollector, EventStoreCollector>();
+    }
+
+    private static IServiceCollection AddMessageRetryService(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton<MessageRetryService>()
+            .AddSingleton<IMessageRetryService>(p => p.GetRequiredService<MessageRetryService>())
+            .AddSingleton<IMessageRetryContextAccessor>(p => p.GetRequiredService<MessageRetryService>());
     }
 
     private static IServiceCollection AddProcessor(this IServiceCollection services)

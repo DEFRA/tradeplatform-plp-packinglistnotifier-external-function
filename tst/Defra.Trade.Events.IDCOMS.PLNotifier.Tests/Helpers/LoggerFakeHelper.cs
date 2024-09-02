@@ -1,10 +1,10 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Linq.Expressions;
 using System.Reflection;
-using FakeItEasy.Configuration;
 using FakeItEasy;
+using FakeItEasy.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;

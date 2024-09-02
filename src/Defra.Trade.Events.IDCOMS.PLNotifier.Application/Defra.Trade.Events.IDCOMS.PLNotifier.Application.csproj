@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Defra.Trade.Common.Functions" Version="3.2.1" />
-    <PackageReference Include="Defra.Trade.Common" Version="3.0.0" />
-    <PackageReference Include="Defra.Trade.Crm" Version="3.0.0" />
+    <PackageReference Include="Defra.Trade.Common.Functions" Version="4.0.0" />
+    <PackageReference Include="Defra.Trade.Common" Version="4.0.2" />
+    <PackageReference Include="Defra.Trade.Crm" Version="4.0.0" />
   </ItemGroup>
   
 </Project>

@@ -1,5 +1,5 @@
 // Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using Defra.Trade.Common.Function.Health.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +21,7 @@ public sealed class HealthCheckHttpTriggerFunction
     }
 
     [FunctionName("HealthCheckHttpTriggerFunction")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required for function processing")]
     public async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health")] HttpRequest request)
     {

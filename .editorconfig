@@ -145,7 +145,7 @@ csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
 # License header
-file_header_template = Copyright DEFRA (c). All rights reserved.\nLicensed under the Open Government Licence v3.0.
+file_header_template = Copyright DEFRA (c). All rights reserved.\nLicensed under the Open Government License v3.0.
 
 # C++ Files
 [*.{cpp,h,in}]

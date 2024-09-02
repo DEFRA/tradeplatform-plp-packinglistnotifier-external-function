@@ -1,5 +1,5 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
-// Licensed under the Open Government Licence v3.0.
+// Licensed under the Open Government License v3.0.
 
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +44,7 @@ public static class FunctionTestHelpers
         var methodInfo = typeof(TClass)
             .GetMethod(methodName);
 
-        var attribute = methodInfo!
+        object[] attribute = methodInfo!
             .GetCustomAttributes(typeof(TAttribute), false);
 
         return attribute;
@@ -54,7 +54,7 @@ public static class FunctionTestHelpers
                 where TClass : class
         where TAttribute : Attribute
     {
-        var attributes = GetMethodAttributes<TClass, TAttribute>(methodName);
+        object[]? attributes = GetMethodAttributes<TClass, TAttribute>(methodName);
 
         attributes.ShouldNotBeNull();
         attributes.ShouldHaveSingleItem();
