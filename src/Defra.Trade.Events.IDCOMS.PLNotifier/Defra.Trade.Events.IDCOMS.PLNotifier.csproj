@@ -14,7 +14,6 @@
     <FunctionsPreservedDependencies Include="Microsoft.Extensions.DependencyModel.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Defra.Trade.Common.Function.Health\Defra.Trade.Common.Function.Health.csproj" />
     <ProjectReference Include="..\Defra.Trade.Events.IDCOMS.PLNotifier.Application\Defra.Trade.Events.IDCOMS.PLNotifier.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
