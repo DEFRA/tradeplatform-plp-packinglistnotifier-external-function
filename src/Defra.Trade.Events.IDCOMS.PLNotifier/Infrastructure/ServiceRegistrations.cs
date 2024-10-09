@@ -3,7 +3,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Defra.Trade.Common.Config;
-using Defra.Trade.Common.Function.Health.DynamicsClient;
+using Defra.Trade.Common.Dynamics.ApiClient;
+using Defra.Trade.Common.Dynamics.ApiClient.Infra;
 using Defra.Trade.Common.Functions;
 using Defra.Trade.Common.Functions.EventStore;
 using Defra.Trade.Common.Functions.Interfaces;

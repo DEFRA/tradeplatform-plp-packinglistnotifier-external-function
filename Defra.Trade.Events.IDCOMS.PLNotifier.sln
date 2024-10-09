@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Events.IDCOMS.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Events.IDCOMS.PLNotifier.Tests", "tst\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj", "{5FADCCA1-A5F1-4DB2-B690-C4F3157742E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.Trade.Common.Function.Health", "src\Defra.Trade.Common.Function.Health\Defra.Trade.Common.Function.Health.csproj", "{3F54885B-0074-4F4F-8C55-47F0F28D1A28}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{5FADCCA1-A5F1-4DB2-B690-C4F3157742E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FADCCA1-A5F1-4DB2-B690-C4F3157742E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FADCCA1-A5F1-4DB2-B690-C4F3157742E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F54885B-0074-4F4F-8C55-47F0F28D1A28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F54885B-0074-4F4F-8C55-47F0F28D1A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F54885B-0074-4F4F-8C55-47F0F28D1A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F54885B-0074-4F4F-8C55-47F0F28D1A28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,7 +60,6 @@ Global
 		{46C296AD-11A7-4404-BF4A-8208095DF811} = {A4137746-B7DD-4936-9603-BD2CEAE229D6}
 		{743BAAA5-14C0-4F14-923D-4C4A1714C0A7} = {41EA560E-B713-4CCF-BF3A-1CC2007F5B9A}
 		{5FADCCA1-A5F1-4DB2-B690-C4F3157742E6} = {41EA560E-B713-4CCF-BF3A-1CC2007F5B9A}
-		{3F54885B-0074-4F4F-8C55-47F0F28D1A28} = {A4137746-B7DD-4936-9603-BD2CEAE229D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C65CC090-BD17-4868-BE15-06C346D87F53}

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Defra.Trade.Common.Function.Health" Version="4.0.6" />
     <PackageReference Include="Defra.Trade.Common.Functions" Version="4.0.0" />
     <PackageReference Include="Defra.Trade.Common" Version="4.0.2" />
     <PackageReference Include="Defra.Trade.Crm" Version="4.0.0" />
