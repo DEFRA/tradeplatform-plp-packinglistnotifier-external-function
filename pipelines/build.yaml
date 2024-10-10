@@ -33,7 +33,7 @@ resources:
       ref: master
   pipelines:
     - pipeline: INFRA
-      source: Defra.Trade.API.Infra Trade-PLP-IDOMSNotifier
+      source: Defra.Trade.API.Infra Trade-PLP-IDCOMSNotifier
       trigger:
         branches:
           include:
