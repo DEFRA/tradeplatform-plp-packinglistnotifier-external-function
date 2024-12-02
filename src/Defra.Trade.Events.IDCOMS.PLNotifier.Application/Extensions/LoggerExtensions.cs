@@ -51,6 +51,6 @@ public static partial class LoggerExtensions
     [LoggerMessage(EventId = 23, EventName = nameof(ProcessingNotificationRetry), Level = LogLevel.Error, Message = "Failed to process PL notification for application Id : {ApplicationId} attempting to retry message with retry count of {RetryCount}")]
     public static partial void ProcessingNotificationRetry(this ILogger logger, Exception ex, string applicationId, int retryCount);
 
-    [LoggerMessage(EventId =24, EventName =nameof(MessageFailedWithoutReason), Level = LogLevel.Warning, Message = "Parsing failed but no reason was provided for application Id : {ApplicationId}")]
+    [LoggerMessage(EventId = 24, EventName = nameof(MessageFailedWithoutReason), Level = LogLevel.Warning, Message = "Parsing failed but no reason was provided for application Id : {ApplicationId}")]
     public static partial void MessageFailedWithoutReason(this ILogger logger, string applicationId);
 }

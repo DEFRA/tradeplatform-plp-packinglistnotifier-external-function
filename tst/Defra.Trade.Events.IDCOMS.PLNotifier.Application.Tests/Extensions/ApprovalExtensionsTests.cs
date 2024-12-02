@@ -21,7 +21,7 @@ public sealed class ApprovalExtensionsTests
 
         bool result = input.IsRejectedWithoutReason();
 
-       result.ShouldBeTrue();
+        result.ShouldBeTrue();
     }
 
     [Fact]

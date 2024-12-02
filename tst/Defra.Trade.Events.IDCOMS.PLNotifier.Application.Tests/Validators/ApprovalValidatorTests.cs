@@ -68,7 +68,7 @@ public sealed class ApprovalValidatorTests
         const int maxLength = 2001;
         StringBuilder errorBuilder = new(maxLength);
         for (int i = 0; i < maxLength; i++) errorBuilder.Append("1");
- 
+
         var approvalMock = new Inbound.Approval
         {
             ApplicationId = $"someRef {Guid.NewGuid()}",
