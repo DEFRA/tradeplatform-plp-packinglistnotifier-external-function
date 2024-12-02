@@ -119,7 +119,7 @@ public sealed class ApprovalMessageProcessorTests
         var mockExportApplication = new Dynamics.ApprovalPayload
         {
             ApplicationId = message.ApplicationId,
-            ExportApplicationId = Guid.NewGuid()
+            ExportApplicationId = Guid.NewGuid(),
         };
 
         A.CallTo(() => _crmClient.ListPagedAsync<Dynamics.ApprovalPayload>(A<string>._, default))
