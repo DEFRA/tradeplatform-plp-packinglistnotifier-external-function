@@ -41,18 +41,24 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 
     public Task<string> GetSchemaAsync(TradeEventMessageHeader messageHeader) => Task.FromResult(string.Empty);
 
-    public async Task<StatusResponse<Models.Approval>> ProcessAsync(Models.Approval message, TradeEventMessageHeader messageHeader)
+    public async Task<StatusResponse<Approval>> ProcessAsync(Approval message, TradeEventMessageHeader messageHeader)
     {
         _logger.ProcessingNotification(message.ApplicationId!);
+
         if (string.IsNullOrWhiteSpace(message.ApplicationId))
         {
             throw new ArgumentNullException(nameof(message));
         }
 
+        if (message.IsRejectedWithoutReason())
+        {
+            _logger.MessageFailedWithoutReason(message.ApplicationId);
+        }
+
         return await ProcessInternalAsync(message);
     }
 
-    public async Task<StatusResponse<Models.Approval>> ProcessInternalAsync(Models.Approval message)
+    public async Task<StatusResponse<Approval>> ProcessInternalAsync(Approval message)
     {
         try
         {
@@ -76,7 +82,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
             throw;
         }
 
-        return new StatusResponse<Models.Approval>() { ForwardMessage = false, Response = message };
+        return new StatusResponse<Approval>() { ForwardMessage = false, Response = message };
     }
 
     [ExcludeFromCodeCoverage(Justification = "Unable to mock static logger method.")]
@@ -88,9 +94,9 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
     }
 
     public Task<bool> ValidateMessageLabelAsync(TradeEventMessageHeader messageHeader)
-        => Task.FromResult(messageHeader.Label!.Equals(Models.PlNotifierHeaderConstants.Label, StringComparison.OrdinalIgnoreCase));
+        => Task.FromResult(messageHeader.Label!.Equals(PlNotifierHeaderConstants.Label, StringComparison.OrdinalIgnoreCase));
 
-    private Dynamics.ApprovalPayload MapToDynamics(Models.Approval message)
+    private Dynamics.ApprovalPayload MapToDynamics(Approval message)
     {
         _logger.MapToDynamics(message.ApplicationId!);
 
@@ -104,7 +110,9 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         var payload = new Dynamics.ApprovalPayload
         {
             ApplicationId = message.ApplicationId,
-            ApprovalStatus = (int)dynamicsApprovalStatus
+            ApprovalStatus = (int)dynamicsApprovalStatus,
+            FailureReasons = message.IsRejectedWithoutReason() ? string.Empty
+                                                               : message.FailureReasons
         };
 
         _logger.MapToDynamicsSuccess(payload.ApplicationId!);
@@ -112,7 +120,7 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         return payload;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Bug", "S1751:Loops with at most one iteration should be refactored", Justification = "Crm client library only provides IAsyncEnumerator for get action, and only 1 result is possible in this context")]
+    [SuppressMessage("Major Bug", "S1751:Loops with at most one iteration should be refactored", Justification = "Crm client library only provides IAsyncEnumerator for get action, and only 1 result is possible in this context")]
     private async Task SendToDynamics(Dynamics.ApprovalPayload payload)
     {
         _logger.SendPayload(payload.ApplicationId!);
@@ -122,7 +130,8 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
 
         await foreach (var exportApp in exportAppEnumerator)
         {
-            payload.ExportApplicationId = exportApp.First().ExportApplicationId;
+            var exisitingAppllication = exportApp.First();
+            payload.ExportApplicationId = exisitingAppllication.ExportApplicationId;
             break;
         }
 

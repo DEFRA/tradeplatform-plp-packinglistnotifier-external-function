@@ -20,6 +20,20 @@ public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
             .Cascade(CascadeMode.Stop)
             .NotEmpty().WithMessage(ValidationMessages.NullField)
             .Must(BeApprovalStatus!).WithMessage(PlNotifierValidationMessages.ApprovalStatus);
+
+        When(m => string.Equals(m.ApprovalStatus, "rejected", StringComparison.OrdinalIgnoreCase), () =>
+        {
+            RuleFor(m => m.FailureReasons)
+            .Cascade(CascadeMode.Stop)
+            .MaximumLength(2000).WithMessage(PlNotifierValidationMessages.FailureReasonLength);
+        });
+
+        When(m => string.Equals(m.ApprovalStatus, "approved", StringComparison.OrdinalIgnoreCase), () =>
+        {
+            RuleFor(m => m.FailureReasons)
+            .Cascade(CascadeMode.Stop)
+            .Empty().WithMessage(PlNotifierValidationMessages.NotEmptyField);
+        });
     }
 
     private bool BeApprovalStatus(string status)

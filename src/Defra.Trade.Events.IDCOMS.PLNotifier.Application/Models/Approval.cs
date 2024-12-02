@@ -8,5 +8,7 @@ public sealed class Approval
     // Entity key
     public string? ApplicationId { get; set; }
 
-    public string? ApprovalStatus { get; set; }
+    public string ApprovalStatus { get; set; } = string.Empty;
+
+    public string? FailureReasons { get; set; }
 }
