@@ -9,4 +9,6 @@ public sealed class Approval
     public string? ApplicationId { get; set; }
 
     public string? ApprovalStatus { get; set; }
+
+    public string? FailureReasons { get; set; }
 }

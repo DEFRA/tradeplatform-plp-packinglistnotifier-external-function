@@ -17,4 +17,7 @@ public sealed class ApprovalPayload
 
     [CrmProperty("rms_automatedpackinglistcheck")]
     public int? ApprovalStatus { get; set; }
+
+    [CrmProperty("rms_plpfailurereasons")]
+    public string? FailureReasons { get; set; }
 }
