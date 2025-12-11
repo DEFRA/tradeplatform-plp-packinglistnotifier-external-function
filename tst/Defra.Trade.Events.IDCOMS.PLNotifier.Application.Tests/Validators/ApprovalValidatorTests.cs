@@ -22,6 +22,12 @@ public sealed class ApprovalValidatorTests
     [InlineData("Approved", null)]
     [InlineData("rejected", "failureReason")]
     [InlineData("Rejected", "failureReason")]
+    [InlineData("rejected_ineligible", "failureReason")]
+    [InlineData("Rejected_Ineligible", "failureReason")]
+    [InlineData("rejected_coo", "failureReason")]
+    [InlineData("Rejected_Coo", "failureReason")]
+    [InlineData("rejected_other", "failureReason")]
+    [InlineData("Rejected_Other", "failureReason")]
     public void ApprovalValidator_WithValidData_PassesValidation(string approvalStatus, string? failureReason)
     {
         // arrange
@@ -62,6 +68,12 @@ public sealed class ApprovalValidatorTests
     [Theory]
     [InlineData("rejected")]
     [InlineData("Rejected")]
+    [InlineData("rejected_ineligible")]
+    [InlineData("Rejected_Ineligible")]
+    [InlineData("rejected_coo")]
+    [InlineData("Rejected_Coo")]
+    [InlineData("rejected_other")]
+    [InlineData("Rejected_Other")]
     public void ApprovalValidator_WithValidData_FailsValidation_TooLong(string approvalStatus)
     {
         // arrange

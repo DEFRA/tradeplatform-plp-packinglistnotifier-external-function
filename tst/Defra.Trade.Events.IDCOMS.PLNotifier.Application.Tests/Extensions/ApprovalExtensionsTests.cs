@@ -39,6 +39,88 @@ public sealed class ApprovalExtensionsTests
     }
 
     [Fact]
+    public void IsRejectedIneligibleWithoutReason_True()
+    {
+        Approval input = new()
+        {
+            ApprovalStatus = "rejected_ineligible"
+        };
+
+        bool result = input.IsRejectedWithoutReason();
+
+        result.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void IsRejectedIneligibleWithoutReason_False_Reason()
+    {
+        Approval input = new()
+        {
+            ApprovalStatus = "rejected_ineligible",
+            FailureReasons = "A reason"
+        };
+
+        bool result = input.IsRejectedWithoutReason();
+
+        result.ShouldBeFalse();
+
+    }
+
+    [Fact]
+    public void IsRejectedCooWithoutReason_True()
+    {
+        Approval input = new()
+        {
+            ApprovalStatus = "rejected_coo"
+        };
+
+        bool result = input.IsRejectedWithoutReason();
+
+        result.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void IsRejectedCooWithoutReason_False_Reason()
+    {
+        Approval input = new()
+        {
+            ApprovalStatus = "rejected_coo",
+            FailureReasons = "A reason"
+        };
+
+        bool result = input.IsRejectedWithoutReason();
+
+        result.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void IsRejectedOtherWithoutReason_True()
+    {
+        Approval input = new()
+        {
+            ApprovalStatus = "rejected_other"
+        };
+
+        bool result = input.IsRejectedWithoutReason();
+
+        result.ShouldBeTrue();
+    }
+
+    [Fact]
+    public void IsRejectedOtherWithoutReason_False_Reason()
+    {
+        Approval input = new()
+        {
+            ApprovalStatus = "rejected_other",
+            FailureReasons = "A reason"
+        };
+
+        bool result = input.IsRejectedWithoutReason();
+
+        result.ShouldBeFalse();
+    }
+
+    [Fact]
     public void IsRejectedWithoutReason_False_Accepted()
     {
         Approval input = new()
