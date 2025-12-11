@@ -202,6 +202,12 @@ public sealed class ApprovalMessageProcessorTests
     [InlineData("approved")]
     [InlineData("Rejected")]
     [InlineData("rejected")]
+    [InlineData("Rejected_Ineligible")]
+    [InlineData("rejected_ineligible")]
+    [InlineData("Rejected_Coo")]
+    [InlineData("rejected_coo")]
+    [InlineData("Rejected_Other")]
+    [InlineData("rejected_other")]
     public async Task ProcessAsync_WithValidParams_SendsToDynamics(string approvalStatus)
     {
         // arrange
