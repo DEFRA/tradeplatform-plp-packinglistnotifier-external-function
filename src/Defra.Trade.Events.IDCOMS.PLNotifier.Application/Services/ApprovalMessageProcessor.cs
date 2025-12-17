@@ -104,6 +104,9 @@ public sealed class ApprovalMessageProcessor : IMessageProcessor<Models.Approval
         {
             "approved" => Dynamics.ApprovalStatus.Approved,
             "rejected" => Dynamics.ApprovalStatus.Rejected,
+            "rejected_ineligible" => Dynamics.ApprovalStatus.Rejected_Ineligible,
+            "rejected_coo" => Dynamics.ApprovalStatus.Rejected_Coo,
+            "rejected_other" => Dynamics.ApprovalStatus.Rejected_Other,
             _ => throw new ArgumentOutOfRangeException(nameof(message))
         };
 

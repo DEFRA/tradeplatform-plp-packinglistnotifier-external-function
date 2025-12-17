@@ -8,7 +8,7 @@ namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 
 public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
 {
-    private readonly List<string> _approvalStatus = ["approved", "rejected"];
+    private readonly List<string> _approvalStatus = ["approved", "rejected", "rejected_ineligible", "rejected_coo", "rejected_other"];
 
     public ApprovalValidator()
     {
@@ -21,7 +21,10 @@ public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
             .NotEmpty().WithMessage(ValidationMessages.NullField)
             .Must(BeApprovalStatus!).WithMessage(PlNotifierValidationMessages.ApprovalStatus);
 
-        When(m => string.Equals(m.ApprovalStatus, "rejected", StringComparison.OrdinalIgnoreCase), () =>
+        When(m => string.Equals(m.ApprovalStatus, "rejected", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(m.ApprovalStatus, "rejected_ineligible", StringComparison.OrdinalIgnoreCase) || 
+                   string.Equals(m.ApprovalStatus, "rejected_coo", StringComparison.OrdinalIgnoreCase) || 
+                   string.Equals(m.ApprovalStatus, "rejected_other", StringComparison.OrdinalIgnoreCase), () =>
         {
             RuleFor(m => m.FailureReasons)
             .Cascade(CascadeMode.Stop)

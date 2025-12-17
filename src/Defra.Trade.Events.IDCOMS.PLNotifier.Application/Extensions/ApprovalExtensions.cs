@@ -9,7 +9,7 @@ public static class ApprovalExtensions
 
     public static bool IsRejectedWithoutReason(this Approval approval)
     {
-        return approval.ApprovalStatus.Equals("rejected", StringComparison.OrdinalIgnoreCase) &&
+        return approval.ApprovalStatus.Contains("rejected", StringComparison.OrdinalIgnoreCase) &&
             string.IsNullOrEmpty(approval.FailureReasons);
     }
 }
