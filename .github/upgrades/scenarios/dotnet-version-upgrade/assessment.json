@@ -1,0 +1,814 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-04-30T14:37:07.7140182Z",
+  "analysisEndTime": "2026-04-30T14:37:13.8357649Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 4,
+      "issues": 8,
+      "incidents": 23,
+      "effort": 25
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 9,
+        "Optional": 2,
+        "Potential": 12,
+        "Information": 0
+      },
+      "category": {
+        "Project": 4,
+        "AzureFunctionsUpgrade": 1,
+        "NuGet": 4,
+        "Api": 14
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier.Application\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Defra.Trade.Events.IDCOMS.PLNotifier.Application",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 17,
+        "numberOfCodeFiles": 17,
+        "linesTotal": 513,
+        "linesOfCode": 513,
+        "totalApiScanned": 1078,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "b6771a92-b37d-4351-84f9-34959713bf4a",
+          "ruleId": "Project.0002",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier.Application\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier.Application\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.csproj",
+      "startingProject": true,
+      "issues": 2,
+      "storyPoints": 2,
+      "properties": {
+        "appName": "Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 9,
+        "numberOfCodeFiles": 7,
+        "linesTotal": 2479,
+        "linesOfCode": 712,
+        "totalApiScanned": 985,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "c7316a93-3b23-47fb-9a0b-ddf0dab413ef",
+          "ruleId": "NuGet.0005",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3",
+              "protected": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.csproj",
+            "snippet": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3",
+            "protectedSnippet": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3",
+            "label": "xunit 2.9.0",
+            "properties": {
+              "PackageId": "xunit",
+              "PackageVersion": "2.9.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "25a82107-78b1-4e4d-b0f7-ab650fdaa0c3",
+          "ruleId": "Project.0002",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+      "startingProject": true,
+      "issues": 5,
+      "storyPoints": 9,
+      "properties": {
+        "appName": "Defra.Trade.Events.IDCOMS.PLNotifier",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 6,
+        "numberOfCodeFiles": 6,
+        "linesTotal": 298,
+        "linesOfCode": 298,
+        "totalApiScanned": 335,
+        "minLinesOfCodeToChange": 3,
+        "maxLinesOfCodeToChange": 3
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "80a33dfd-76eb-4ebf-9eb9-c7b3b5798884",
+          "ruleId": "AzureFunctionsUpgrade.0002",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj"
+          }
+        },
+        {
+          "incidentId": "33e7cc7b-12a4-4f1e-9741-b1011160fe8e",
+          "ruleId": "NuGet.0002",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.NET.Sdk.Functions, 4.4.1\n\nRecommendation:\n\nRemove Microsoft.NET.Sdk.Functions, and replace with new package Microsoft.Azure.Functions.Worker.Extensions.Http 3.3.0,\nMicrosoft.Azure.Functions.Worker.Sdk 2.0.7,\nMicrosoft.Azure.Functions.Worker 2.52.0",
+              "protected": "Microsoft.NET.Sdk.Functions, 4.4.1\n\nRecommendation:\n\nRemove Microsoft.NET.Sdk.Functions, and replace with new package Microsoft.Azure.Functions.Worker.Extensions.Http 3.3.0,\nMicrosoft.Azure.Functions.Worker.Sdk 2.0.7,\nMicrosoft.Azure.Functions.Worker 2.52.0"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+            "snippet": "Microsoft.NET.Sdk.Functions, 4.4.1\n\nRecommendation:\n\nRemove Microsoft.NET.Sdk.Functions, and replace with new package Microsoft.Azure.Functions.Worker.Extensions.Http 3.3.0,\nMicrosoft.Azure.Functions.Worker.Sdk 2.0.7,\nMicrosoft.Azure.Functions.Worker 2.52.0",
+            "protectedSnippet": "Microsoft.NET.Sdk.Functions, 4.4.1\n\nRecommendation:\n\nRemove Microsoft.NET.Sdk.Functions, and replace with new package Microsoft.Azure.Functions.Worker.Extensions.Http 3.3.0,\nMicrosoft.Azure.Functions.Worker.Sdk 2.0.7,\nMicrosoft.Azure.Functions.Worker 2.52.0",
+            "label": "Microsoft.NET.Sdk.Functions 4.4.1",
+            "properties": {
+              "PackageId": "Microsoft.NET.Sdk.Functions",
+              "PackageVersion": "4.4.1",
+              "PackageNewVersion": null,
+              "PackageReplacements": "Replace with new package Microsoft.Azure.Functions.Worker.Extensions.Http=3.3.0;Microsoft.Azure.Functions.Worker.Sdk=2.0.7;Microsoft.Azure.Functions.Worker=2.52.0"
+            }
+          }
+        },
+        {
+          "incidentId": "6cebc5ad-7571-47d4-9765-5ea9a849c143",
+          "ruleId": "Project.0002",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "a51c5aa2-e35d-4285-a5bc-cf8453632a68",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "hostBuilder.Services.AddAutoMapper(typeof(ApprovalProfile).Assembly);",
+              "protected": "T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Infrastructure\\ConfigureMappingExtensions.cs",
+            "snippet": "hostBuilder.Services.AddAutoMapper(typeof(ApprovalProfile).Assembly);",
+            "protectedSnippet": "T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions",
+            "label": "T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions",
+            "line": 20,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "a5f72e3f-d100-4cf1-a6ff-697b5173aa85",
+          "ruleId": "Api.0001",
+          "description": "API is unavailable in net8.0 ",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "hostBuilder.Services.AddAutoMapper(assembly);",
+              "protected": "T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Infrastructure\\ConfigureMappingExtensions.cs",
+            "snippet": "hostBuilder.Services.AddAutoMapper(assembly);",
+            "protectedSnippet": "T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions",
+            "label": "T:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions",
+            "line": 19,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "c259beab-463b-4533-949e-1b78e4f6fd31",
+          "ruleId": "Api.0001",
+          "description": "Breaking change: DynamicallyAccessedMembers annotation removed from trim-unsafe configuration APIs ",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "services.Configure\u003CServiceBusSettings\u003E(configuration.GetSection(ServiceBusSettings.OptionsName));",
+              "protected": "M:Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions.Configure\u0060\u00601(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Infrastructure\\ServiceRegistrations.cs",
+            "snippet": "services.Configure\u003CServiceBusSettings\u003E(configuration.GetSection(ServiceBusSettings.OptionsName));",
+            "protectedSnippet": "M:Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions.Configure\u0060\u00601(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)",
+            "label": "M:Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions.Configure\u0060\u00601(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/extensions/10.0/dynamically-accessed-members-configuration.md",
+                "isCustom": false
+              }
+            ],
+            "line": 42,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "07286fb0-55cf-4557-af6f-ad4b4d431b3f",
+          "ruleId": "NuGet.0003",
+          "projectPath": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Azure.WebJobs.Extensions.ServiceBus, 5.16.4\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+              "protected": "Microsoft.Azure.WebJobs.Extensions.ServiceBus, 5.16.4\n\nRecommendation:\n\nPackage functionality included with new framework reference"
+            },
+            "kind": "File",
+            "path": "src\\Defra.Trade.Events.IDCOMS.PLNotifier\\Defra.Trade.Events.IDCOMS.PLNotifier.csproj",
+            "snippet": "Microsoft.Azure.WebJobs.Extensions.ServiceBus, 5.16.4\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "protectedSnippet": "Microsoft.Azure.WebJobs.Extensions.ServiceBus, 5.16.4\n\nRecommendation:\n\nPackage functionality included with new framework reference",
+            "label": "Microsoft.Azure.WebJobs.Extensions.ServiceBus 5.16.4",
+            "properties": {
+              "PackageId": "Microsoft.Azure.WebJobs.Extensions.ServiceBus",
+              "PackageVersion": "5.16.4",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+      "startingProject": true,
+      "issues": 4,
+      "storyPoints": 13,
+      "properties": {
+        "appName": "Defra.Trade.Events.IDCOMS.PLNotifier.Tests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net8.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 8,
+        "numberOfCodeFiles": 6,
+        "linesTotal": 2186,
+        "linesOfCode": 419,
+        "totalApiScanned": 805,
+        "minLinesOfCodeToChange": 11,
+        "maxLinesOfCodeToChange": 11
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "6110983f-54de-4a9f-b7e0-446ea3402824",
+          "ruleId": "NuGet.0005",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3",
+              "protected": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+            "snippet": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3",
+            "protectedSnippet": "xunit, 2.9.0\n\nRecommendation:\n\nThis package will only be updated for security issues. All future feature work has moved onto v3.\n\nGuide for migrating from xUnit.net v2 to v3: https://xunit.net/docs/getting-started/v3/migration\nRemove xunit, and replace with new package xunit, 2.9.3",
+            "label": "xunit 2.9.0",
+            "properties": {
+              "PackageId": "xunit",
+              "PackageVersion": "2.9.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "190b7250-2b3f-4da0-98ef-569b21c658c8",
+          "ruleId": "Project.0002",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Current target framework: net8.0\nRecommended target framework: net10.0",
+              "protected": "Current target framework: net8.0\nRecommended target framework: net10.0"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+            "snippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "protectedSnippet": "Current target framework: net8.0\nRecommended target framework: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net8.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "fb6101bf-d686-40c2-8a0c-7a2a57f5a57b",
+          "ruleId": "Api.0002",
+          "description": "Breaking change: New TimeSpan.From*() overloads that take integers ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var healthReport = new HealthReport(new Dictionary\u003Cstring, HealthReportEntry\u003E(), HealthStatus.Unhealthy, TimeSpan.FromSeconds(1));",
+              "protected": "M:System.TimeSpan.FromSeconds(System.Double)"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\HealthCheckHttpTriggerFunctionTests.cs",
+            "snippet": "var healthReport = new HealthReport(new Dictionary\u003Cstring, HealthReportEntry\u003E(), HealthStatus.Unhealthy, TimeSpan.FromSeconds(1));",
+            "protectedSnippet": "M:System.TimeSpan.FromSeconds(System.Double)",
+            "label": "M:System.TimeSpan.FromSeconds(System.Double)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/core-libraries/9.0/timespan-from-overloads.md",
+                "isCustom": false
+              }
+            ],
+            "line": 76,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "2167e2ea-0313-4fbe-a253-68d21aec43a2",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\HealthCheckHttpTriggerFunctionTests.cs",
+            "snippet": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 75,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "238be5f3-5f23-449b-a2a1-2f861d490df0",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+              "protected": "M:System.Uri.#ctor(System.String)"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\HealthCheckHttpTriggerFunctionTests.cs",
+            "snippet": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+            "protectedSnippet": "M:System.Uri.#ctor(System.String)",
+            "label": "M:System.Uri.#ctor(System.String)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 75,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "1afc957e-95a8-4446-bdb8-012c38cb2dd7",
+          "ruleId": "Api.0002",
+          "description": "Breaking change: New TimeSpan.From*() overloads that take integers ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var healthReport = new HealthReport(new Dictionary\u003Cstring, HealthReportEntry\u003E(), HealthStatus.Healthy, TimeSpan.FromSeconds(1));",
+              "protected": "M:System.TimeSpan.FromSeconds(System.Double)"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\HealthCheckHttpTriggerFunctionTests.cs",
+            "snippet": "var healthReport = new HealthReport(new Dictionary\u003Cstring, HealthReportEntry\u003E(), HealthStatus.Healthy, TimeSpan.FromSeconds(1));",
+            "protectedSnippet": "M:System.TimeSpan.FromSeconds(System.Double)",
+            "label": "M:System.TimeSpan.FromSeconds(System.Double)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/core-libraries/9.0/timespan-from-overloads.md",
+                "isCustom": false
+              }
+            ],
+            "line": 55,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "56ff66f1-5e5e-49c4-b4dc-ec36fe16fe6c",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\HealthCheckHttpTriggerFunctionTests.cs",
+            "snippet": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 54,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "4e61f796-0b78-4fb1-8e74-1ea03b3b3f1d",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+              "protected": "M:System.Uri.#ctor(System.String)"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\HealthCheckHttpTriggerFunctionTests.cs",
+            "snippet": "var req = new FakeHttpRequest(A.Fake\u003CFunctionContext\u003E(), new Uri(\u0022https://test/api/message\u0022), body);",
+            "protectedSnippet": "M:System.Uri.#ctor(System.String)",
+            "label": "M:System.Uri.#ctor(System.String)",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 54,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "ae0b1dd6-3b18-4b12-abcf-e4ac49f3748a",
+          "ruleId": "Api.0002",
+          "description": "API is available in package System.Memory.Data, 8.0.0. Add package reference to System.Memory.Data, 8.0.0",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString(\u0022{\\\u0022GCId\\\u0022: \\\u0022123\\\u0022}\u0022));",
+              "protected": "T:System.BinaryData"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\PlNotifierServiceBusTriggerFunctionTests.cs",
+            "snippet": "var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString(\u0022{\\\u0022GCId\\\u0022: \\\u0022123\\\u0022}\u0022));",
+            "protectedSnippet": "T:System.BinaryData",
+            "label": "T:System.BinaryData",
+            "properties": {
+              "PackageId": "System.Memory.Data",
+              "PackageNewVersion": "8.0.0"
+            },
+            "line": 38,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "af0c776a-119e-46d9-840c-70898c88afc7",
+          "ruleId": "Api.0002",
+          "description": "API is available in package System.Memory.Data, 8.0.0. Add package reference to System.Memory.Data, 8.0.0",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString(\u0022{\\\u0022GCId\\\u0022: \\\u0022123\\\u0022}\u0022));",
+              "protected": "T:System.BinaryData"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\PlNotifierServiceBusTriggerFunctionTests.cs",
+            "snippet": "var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString(\u0022{\\\u0022GCId\\\u0022: \\\u0022123\\\u0022}\u0022));",
+            "protectedSnippet": "T:System.BinaryData",
+            "label": "T:System.BinaryData",
+            "properties": {
+              "PackageId": "System.Memory.Data",
+              "PackageNewVersion": "8.0.0"
+            },
+            "line": 38,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "d75986ed-f66a-4c8c-984b-59fb29654944",
+          "ruleId": "Api.0002",
+          "description": "API is available in package System.Memory.Data, 8.0.0. Add package reference to System.Memory.Data, 8.0.0",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString(\u0022{\\\u0022GCId\\\u0022: \\\u0022123\\\u0022}\u0022));",
+              "protected": "M:System.BinaryData.FromString(System.String)"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Functions\\PlNotifierServiceBusTriggerFunctionTests.cs",
+            "snippet": "var message = ServiceBusModelFactory.ServiceBusReceivedMessage(messageId: messageId, body: BinaryData.FromString(\u0022{\\\u0022GCId\\\u0022: \\\u0022123\\\u0022}\u0022));",
+            "protectedSnippet": "M:System.BinaryData.FromString(System.String)",
+            "label": "M:System.BinaryData.FromString(System.String)",
+            "properties": {
+              "PackageId": "System.Memory.Data",
+              "PackageNewVersion": "8.0.0"
+            },
+            "line": 38,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "87e30f1a-f16d-4167-867a-96f43a54f0f0",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "public FakeHttpRequest : HttpRequest",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Helpers\\FakeHttpRequest.cs",
+            "snippet": "public FakeHttpRequest : HttpRequest",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 9,
+            "column": 0
+          }
+        },
+        {
+          "incidentId": "87e1b97b-9386-4acb-9db0-af66e60126c9",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: URI length limits removed ",
+          "projectPath": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "public FakeHttpRequest : HttpRequest",
+              "protected": "T:System.Uri"
+            },
+            "kind": "File",
+            "path": "tst\\Defra.Trade.Events.IDCOMS.PLNotifier.Tests\\Helpers\\FakeHttpRequest.cs",
+            "snippet": "public FakeHttpRequest : HttpRequest",
+            "protectedSnippet": "T:System.Uri",
+            "label": "T:System.Uri",
+            "links": [
+              {
+                "title": "API documentation",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/networking/10.0/uri-length-limits-removed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 9,
+            "column": 0
+          }
+        }
+      ],
+      "features": []
+    }
+  ],
+  "rules": {
+    "Project.0002": {
+      "id": "Project.0002",
+      "isFeature": false,
+      "description": "Project\u0027s target framework(s) needs to be changed to the new target framework that you selected for this upgrade.\n\nDuring upgrade target framework will be adjusted to corresponding platform when applicable. In some cases project would result in multiple target frameworks after the upgrade if it was using features that now have their own platforms in modern .NET frameworks (windows, iOS, Android etc).",
+      "label": "Project\u0027s target framework(s) needs to be changed",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Overview of porting from .NET Framework to .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET project SDKs",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "AzureFunctionsUpgrade.0002": {
+      "id": "AzureFunctionsUpgrade.0002",
+      "isFeature": true,
+      "description": "When migrating from in-proc to isolated, enable the use of the V2 model for Azure Functions projects and enable Application Insights.",
+      "label": "Enable the use of the V2 model for Azure Functions projects and enable Application Insights.",
+      "severity": "Mandatory",
+      "effort": 3,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2342114",
+          "isCustom": false
+        },
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2341915",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0002": {
+      "id": "NuGet.0002",
+      "isFeature": false,
+      "description": "NuGet package upgrade is recommended for selected target framework.\n\nStandard .NET packages are recommended to have versions matching version of .NET that project targets.\n\nSome other packages also are known to work better for selected target frameworks.",
+      "label": "NuGet package upgrade is recommended",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262530",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0001": {
+      "id": "Api.0001",
+      "isFeature": false,
+      "description": "API is binary incompatible for selected .NET version: affects existing binaries, often requiring recompilation, because the API has changed in a way that prevents older binaries from loading or executing.",
+      "label": "Binary incompatible for selected .NET version",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Breaking changes in .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262679",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0003": {
+      "id": "NuGet.0003",
+      "isFeature": false,
+      "description": "NuGet package functionality is included with framework reference.\n\nPackage needs to be removed.",
+      "label": "NuGet package functionality is included with framework reference",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262609",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0005": {
+      "id": "NuGet.0005",
+      "isFeature": false,
+      "description": "NuGet package is deprecated.\n\nGo to its documentation and if there is a guidance for replacement of functionality provided by this package.",
+      "label": "NuGet package is deprecated",
+      "severity": "Optional",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262531",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0002": {
+      "id": "Api.0002",
+      "isFeature": false,
+      "description": "API is source incompatible for selected .NET version: requires code changes to compile successfully when targeting a new version, such as removing obsolete APIs or changing method signatures.",
+      "label": "Source incompatible for selected .NET version",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Breaking changes in .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262679",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0003": {
+      "id": "Api.0003",
+      "isFeature": false,
+      "description": "API has a behavioral change in selected .NET version: code and binaries may behave differently at runtime without needing recompilation, but the new behavior might be undesirable and require updates.",
+      "label": "Behavioral change in selected .NET version",
+      "severity": "Potential",
+      "effort": 1
+    }
+  }
+}
