@@ -4,8 +4,7 @@
 using Defra.Trade.Common.Function.Health.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
@@ -20,8 +19,7 @@ public sealed class HealthCheckHttpTriggerFunction
         _healthCheckService = healthCheckService;
     }
 
-    [FunctionName("HealthCheckHttpTriggerFunction")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required for function processing")]
+    [Function("HealthCheckHttpTriggerFunction")]
     public async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health")] HttpRequest request)
     {

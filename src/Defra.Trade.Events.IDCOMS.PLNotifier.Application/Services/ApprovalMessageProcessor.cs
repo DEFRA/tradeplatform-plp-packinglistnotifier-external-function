@@ -3,9 +3,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using Defra.Trade.Common.Functions.Extensions;
-using Defra.Trade.Common.Functions.Interfaces;
-using Defra.Trade.Common.Functions.Models;
+using Defra.Trade.Common.Functions.Isolated.Extensions;
+using Defra.Trade.Common.Functions.Isolated.Interfaces;
+using Defra.Trade.Common.Functions.Isolated.Models;
 using Defra.Trade.Crm;
 using Defra.Trade.Crm.Exceptions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
