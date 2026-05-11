@@ -16,7 +16,6 @@ using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Infrastructure;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 using FluentValidation;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

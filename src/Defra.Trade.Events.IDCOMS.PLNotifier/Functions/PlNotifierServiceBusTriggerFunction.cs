@@ -6,8 +6,8 @@ using Azure.Messaging.ServiceBus;
 using Defra.Trade.Common.Functions.Isolated;
 using Defra.Trade.Common.Functions.Isolated.Interfaces;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
 
@@ -38,7 +38,7 @@ public sealed class PlNotifierServiceBusTriggerFunction
         FunctionContext context)
     {
         _logger.MessageReceived(message.MessageId, context.FunctionDefinition.Name);
-        
+
         await RunInternal(message, messageActions, context);
 
         _logger.MessageProcessed(message.MessageId, context.FunctionDefinition.Name);

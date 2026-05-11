@@ -1,5 +1,5 @@
-﻿//// Copyright DEFRA (c). All rights reserved.
-//// Licensed under the Open Government License v3.0.
+﻿// Copyright DEFRA (c). All rights reserved.
+// Licensed under the Open Government License v3.0.
 
 //using System.Text;
 //using Defra.Trade.Common.Function.Health;

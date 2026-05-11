@@ -22,8 +22,8 @@ public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
             .Must(BeApprovalStatus!).WithMessage(PlNotifierValidationMessages.ApprovalStatus);
 
         When(m => string.Equals(m.ApprovalStatus, "rejected", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(m.ApprovalStatus, "rejected_ineligible", StringComparison.OrdinalIgnoreCase) || 
-                   string.Equals(m.ApprovalStatus, "rejected_coo", StringComparison.OrdinalIgnoreCase) || 
+                   string.Equals(m.ApprovalStatus, "rejected_ineligible", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(m.ApprovalStatus, "rejected_coo", StringComparison.OrdinalIgnoreCase) ||
                    string.Equals(m.ApprovalStatus, "rejected_other", StringComparison.OrdinalIgnoreCase), () =>
         {
             RuleFor(m => m.FailureReasons)
