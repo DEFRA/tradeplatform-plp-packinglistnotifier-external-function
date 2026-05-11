@@ -39,7 +39,7 @@ public sealed class ApprovalMessageProcessorTests
 
         // assert
         result.ShouldNotBeNull();
-        result.ShouldBeOfType(typeof(CustomMessageHeader));
+        result.ShouldBeOfType<CustomMessageHeader>();
     }
 
     [Theory]
