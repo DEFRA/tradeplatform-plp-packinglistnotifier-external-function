@@ -95,7 +95,7 @@ public static class ServiceRegistrations
     {
         return services.AddSingleton(provider =>
         {
-            var connectionString = configuration.GetValue<string>(Models.PlNotifierSettings.ConnectionStringConfigurationKey);
+            var connectionString = configuration.GetValue<string>(Models.PlNotifierSettings.ServiceBusConnectionStringConfigurationKey);
 #if DEBUG
             return new ServiceBusClient(connectionString);
 #else
