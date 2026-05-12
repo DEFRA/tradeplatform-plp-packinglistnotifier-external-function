@@ -19,7 +19,7 @@ public sealed class PlNotifierSettings
 #else
     // Assumes that this is 'Release' and uses Managed Identity rather than connection string
     // ie it will actually bind to ServiceBus:FullyQualifiedNamespace !
-    public const string ConnectionStringConfigurationKey = "ServiceBusConnectionStringFQN";
+    public const string ConnectionStringConfigurationKey = "ServiceBus";
     public const string ServiceBusConnectionStringConfigurationKey = "ServiceBusConnectionStringFQN";
 #endif
 
