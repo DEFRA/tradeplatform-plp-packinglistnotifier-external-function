@@ -60,7 +60,7 @@ public class PlNotifierServiceBusTriggerFunctionTests
             message,
             actions,
             eventStore,
-            (string)null,
+            null,
             PlNotifierSettings.PublisherId,
             PlNotifierSettings.DefaultQueueName,
             "Update"
@@ -112,7 +112,7 @@ public class PlNotifierServiceBusTriggerFunctionTests
             message,
             actions,
             eventStore,
-            (string)null,
+            null,
             PlNotifierSettings.PublisherId,
             PlNotifierSettings.DefaultQueueName,
             "Update"
