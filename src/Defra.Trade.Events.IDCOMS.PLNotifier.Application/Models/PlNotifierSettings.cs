@@ -18,7 +18,7 @@ public sealed class PlNotifierSettings
 #else
     // Assumes that this is 'Release' and uses Managed Identity rather than connection string
     // ie it will actually bind to ServiceBus:FullyQualifiedNamespace !
-    public const string ConnectionStringConfigurationKey = "ServiceBus";
+    public const string ConnectionStringConfigurationKey = "ServiceBus:FullyQualifiedNamespace";
 #endif
 
     public const string DefaultQueueName = "defra.trade.plp.parsed";
