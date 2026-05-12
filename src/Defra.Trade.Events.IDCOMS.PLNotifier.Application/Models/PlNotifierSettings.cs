@@ -14,13 +14,11 @@ public sealed class PlNotifierSettings
 
     // In 'Debug' (locally) use connection string
     public const string ConnectionStringConfigurationKey = "ServiceBus:ConnectionString";
-    public const string ServiceBusConnectionStringConfigurationKey = "ServiceBus:ConnectionString";
 
 #else
     // Assumes that this is 'Release' and uses Managed Identity rather than connection string
     // ie it will actually bind to ServiceBus:FullyQualifiedNamespace !
-    public const string ConnectionStringConfigurationKey = "ServiceBus";
-    public const string ServiceBusConnectionStringConfigurationKey = "ServiceBusConnectionStringFQN";
+    public const string ConnectionStringConfigurationKey = "ServiceBus__fullyQualifiedNamespace";
 #endif
 
     public const string DefaultQueueName = "defra.trade.plp.parsed";
