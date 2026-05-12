@@ -95,10 +95,11 @@ public static class ServiceRegistrations
     {
         return services.AddSingleton(provider =>
         {
-            var connectionString = configuration.GetValue<string>(Models.PlNotifierSettings.ConnectionStringConfigurationKey);
 #if DEBUG
+            var connectionString = configuration.GetValue<string>(Models.PlNotifierSettings.ConnectionStringConfigurationKey);
             return new ServiceBusClient(connectionString);
 #else
+            var connectionString = configuration.GetValue<string>($"{Models.PlNotifierSettings.ConnectionStringConfigurationKey}FQN");
             return new ServiceBusClient(connectionString, new Azure.Identity.DefaultAzureCredential());
 #endif
         });
