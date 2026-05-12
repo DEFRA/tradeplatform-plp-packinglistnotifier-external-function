@@ -96,7 +96,11 @@ public static class ServiceRegistrations
         return services.AddSingleton(provider =>
         {
             var connectionString = configuration.GetValue<string>(Models.PlNotifierSettings.ConnectionStringConfigurationKey);
+#if DEBUG
             return new ServiceBusClient(connectionString);
+#else
+            return new ServiceBusClient(connectionString, new Azure.Identity.DefaultAzureCredential());
+#endif
         });
     }
 }
