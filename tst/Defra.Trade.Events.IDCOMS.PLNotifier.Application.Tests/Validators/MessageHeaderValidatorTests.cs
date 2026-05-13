@@ -2,7 +2,7 @@
 // Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
-using Defra.Trade.Common.Functions.Models;
+using Defra.Trade.Common.Functions.Isolated.Models;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Tests.Validators;
@@ -33,7 +33,7 @@ public sealed class MessageHeaderValidatorTests
             PublisherId = "PLP",
             Status = "Complete",
             TimestampUtc = 1704067200,
-            Type = Common.Functions.Models.Enum.EventType.Internal
+            Type = Common.Functions.Isolated.Models.Enum.EventType.Internal
         };
 
         // act
@@ -59,7 +59,7 @@ public sealed class MessageHeaderValidatorTests
             PublisherId = "wrong publisher",
             Status = "wrong status",
             TimestampUtc = 0,
-            Type = Common.Functions.Models.Enum.EventType.None
+            Type = Common.Functions.Isolated.Models.Enum.EventType.None
         };
 
         // act

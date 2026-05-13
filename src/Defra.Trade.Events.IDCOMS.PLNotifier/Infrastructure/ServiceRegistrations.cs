@@ -2,15 +2,16 @@
 // Licensed under the Open Government License v3.0.
 
 using System.Diagnostics.CodeAnalysis;
+using Azure.Messaging.ServiceBus;
 using Defra.Trade.Common.Config;
 using Defra.Trade.Common.Dynamics.ApiClient;
 using Defra.Trade.Common.Dynamics.ApiClient.Infra;
-using Defra.Trade.Common.Functions;
-using Defra.Trade.Common.Functions.EventStore;
-using Defra.Trade.Common.Functions.Interfaces;
-using Defra.Trade.Common.Functions.Models;
-using Defra.Trade.Common.Functions.Services;
-using Defra.Trade.Common.Functions.Validation;
+using Defra.Trade.Common.Functions.Isolated;
+using Defra.Trade.Common.Functions.Isolated.EventStore;
+using Defra.Trade.Common.Functions.Isolated.Interfaces;
+using Defra.Trade.Common.Functions.Isolated.Models;
+using Defra.Trade.Common.Functions.Isolated.Services;
+using Defra.Trade.Common.Functions.Isolated.Validation;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Infrastructure;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
@@ -32,7 +33,8 @@ public static class ServiceRegistrations
             .AddEventStore()
             .AddProcessor()
             .AddConfigurations(configuration)
-            .AddDynamicsHealthCheckDependencies(configuration);
+            .AddDynamicsHealthCheckDependencies(configuration)
+            .AddServiceBusClient(configuration);
     }
 
     private static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
@@ -81,10 +83,25 @@ public static class ServiceRegistrations
     private static IServiceCollection AddValidators(this IServiceCollection services)
     {
         return services
+             .AddTransient<ISchemaValidator, SchemaValidator>()
              .AddSingleton<ICustomValidatorFactory, CustomValidatorFactory>()
              .AddSingleton<AbstractValidator<TradeEventMessageHeader>, MessageHeaderValidator>()
              .AddSingleton<AbstractValidator<Inbound.Approval>, ApprovalValidator>()
              .AddTransient<IInboundMessageValidator<Inbound.Approval, TradeEventMessageHeader>,
                 InboundMessageValidator<Inbound.Approval, Models.Approval, TradeEventMessageHeader>>();
+    }
+
+    private static IServiceCollection AddServiceBusClient(this IServiceCollection services, IConfiguration configuration)
+    {
+        return services.AddSingleton(provider =>
+        {
+#if DEBUG
+            var connectionString = configuration.GetValue<string>(Models.PlNotifierSettings.ConnectionStringConfigurationKey);
+            return new ServiceBusClient(connectionString);
+#else
+            var connectionString = configuration.GetValue<string>($"{Models.PlNotifierSettings.ConnectionStringConfigurationKey}FQN");
+            return new ServiceBusClient(connectionString, new Azure.Identity.DefaultAzureCredential());
+#endif
+        });
     }
 }

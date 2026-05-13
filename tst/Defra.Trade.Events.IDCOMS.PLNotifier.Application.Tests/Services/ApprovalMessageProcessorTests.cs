@@ -5,8 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Azure.Messaging.ServiceBus;
 
-using Defra.Trade.Common.Functions.Interfaces;
-using Defra.Trade.Common.Functions.Models;
+using Defra.Trade.Common.Functions.Isolated.Interfaces;
+using Defra.Trade.Common.Functions.Isolated.Models;
 using Defra.Trade.Crm;
 using Defra.Trade.Crm.Exceptions;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Services;
@@ -39,7 +39,7 @@ public sealed class ApprovalMessageProcessorTests
 
         // assert
         result.ShouldNotBeNull();
-        result.ShouldBeOfType(typeof(CustomMessageHeader));
+        result.ShouldBeOfType<CustomMessageHeader>();
     }
 
     [Theory]
@@ -274,7 +274,7 @@ public sealed class ApprovalMessageProcessorTests
             PublisherId = "PLP",
             Status = "Complete",
             TimestampUtc = 1704067200,
-            Type = Common.Functions.Models.Enum.EventType.Internal
+            Type = Common.Functions.Isolated.Models.Enum.EventType.Internal
         };
     }
 

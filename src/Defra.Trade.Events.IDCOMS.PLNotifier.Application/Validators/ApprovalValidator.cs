@@ -1,7 +1,7 @@
 ﻿// Copyright DEFRA (c). All rights reserved.
 // Licensed under the Open Government License v3.0.
 
-using Defra.Trade.Common.Functions.Validation;
+using Defra.Trade.Common.Functions.Isolated.Validation;
 using FluentValidation;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Validators;
@@ -22,8 +22,8 @@ public sealed class ApprovalValidator : AbstractValidator<Inbound.Approval>
             .Must(BeApprovalStatus!).WithMessage(PlNotifierValidationMessages.ApprovalStatus);
 
         When(m => string.Equals(m.ApprovalStatus, "rejected", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(m.ApprovalStatus, "rejected_ineligible", StringComparison.OrdinalIgnoreCase) || 
-                   string.Equals(m.ApprovalStatus, "rejected_coo", StringComparison.OrdinalIgnoreCase) || 
+                   string.Equals(m.ApprovalStatus, "rejected_ineligible", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(m.ApprovalStatus, "rejected_coo", StringComparison.OrdinalIgnoreCase) ||
                    string.Equals(m.ApprovalStatus, "rejected_other", StringComparison.OrdinalIgnoreCase), () =>
         {
             RuleFor(m => m.FailureReasons)

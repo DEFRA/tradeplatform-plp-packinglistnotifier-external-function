@@ -3,8 +3,7 @@
 
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
 
