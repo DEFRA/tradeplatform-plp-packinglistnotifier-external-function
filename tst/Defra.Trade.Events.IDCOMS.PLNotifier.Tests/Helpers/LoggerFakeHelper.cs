@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using FakeItEasy;
 using FakeItEasy.Configuration;
+using FakeItEasy.Core;
 using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
@@ -39,6 +40,14 @@ internal static class LoggerFakeHelper
 
     public static IVoidArgumentValidationConfiguration LoggerCall(ILogger logger, LogLevel logLevel, EventId eventId, Exception? exception, string message, Expression<Func<object?[]>>? messageArgs = null)
     {
+        // Configure IsEnabled to return true for the given log level, as source-generated logging checks this before calling Log
+        A.CallTo(() => logger.IsEnabled(logLevel)).Returns(true);
+
+        // Configure the Log method to accept any call with the specified log level
+        // This is necessary for source-generated logging which may create different call signatures than our expression matcher
+        A.CallTo(logger).Where(call => call.Method.Name == "Log" && IsLogLevelMatch(call, logLevel))
+            .DoesNothing();
+
         return A.CallTo(Expression.Lambda<Action>(
             Expression.Call(
                 Expression.Constant(logger),
@@ -60,5 +69,15 @@ internal static class LoggerFakeHelper
                     Expression.Constant(messageFormatter)
             )
         ));
+    }
+
+    private static bool IsLogLevelMatch(IFakeObjectCall call, LogLevel expectedLogLevel)
+    {
+        var args = call.Arguments;
+        if (args.Count > 0 && args[0] is LogLevel actualLogLevel)
+        {
+            return actualLogLevel == expectedLogLevel;
+        }
+        return false;
     }
 }

@@ -4,6 +4,7 @@
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Models;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
+
 public static class ApprovalExtensions
 {
 

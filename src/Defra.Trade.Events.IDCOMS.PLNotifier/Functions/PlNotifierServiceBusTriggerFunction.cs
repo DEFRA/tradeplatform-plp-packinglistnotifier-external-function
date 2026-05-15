@@ -3,11 +3,10 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
-using Defra.Trade.Common.Functions;
-using Defra.Trade.Common.Functions.Interfaces;
+using Defra.Trade.Common.Functions.Isolated;
+using Defra.Trade.Common.Functions.Isolated.Interfaces;
 using Defra.Trade.Events.IDCOMS.PLNotifier.Application.Extensions;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.ServiceBus;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Functions;
@@ -17,53 +16,59 @@ public sealed class PlNotifierServiceBusTriggerFunction
 {
     private readonly IBaseMessageProcessorService<Inbound.Approval> _baseMessageProcessorService;
     private readonly IMessageRetryService _retry;
-    public PlNotifierServiceBusTriggerFunction(IBaseMessageProcessorService<Inbound.Approval> baseMessageProcessorService, IMessageRetryService retry)
+    private readonly ServiceBusClient _serviceBusClient;
+    private readonly ILogger<PlNotifierServiceBusTriggerFunction> _logger;
+
+    public PlNotifierServiceBusTriggerFunction(IBaseMessageProcessorService<Inbound.Approval> baseMessageProcessorService, IMessageRetryService retry, ServiceBusClient serviceBusClient, ILogger<PlNotifierServiceBusTriggerFunction> logger)
     {
         ArgumentNullException.ThrowIfNull(baseMessageProcessorService);
         _baseMessageProcessorService = baseMessageProcessorService;
         _retry = retry;
+        _serviceBusClient = serviceBusClient;
+        _logger = logger;
     }
 
-    [ServiceBusAccount(Models.PlNotifierSettings.ConnectionStringConfigurationKey)]
-    [FunctionName(nameof(PlNotifierServiceBusTriggerFunction))]
+    [Function(nameof(PlNotifierServiceBusTriggerFunction))]
     public async Task RunAsync(
-        [ServiceBusTrigger(queueName: Models.PlNotifierSettings.DefaultQueueName, IsSessionsEnabled = false)] ServiceBusReceivedMessage message,
+        [ServiceBusTrigger(queueName: Models.PlNotifierSettings.DefaultQueueName,
+            IsSessionsEnabled = false,
+            Connection = Models.PlNotifierSettings.ConnectionStringConfigurationKey)]
+            ServiceBusReceivedMessage message,
         ServiceBusMessageActions messageActions,
-        ExecutionContext executionContext,
-        [ServiceBus(Models.PlNotifierSettings.TradeEventInfo)] IAsyncCollector<ServiceBusMessage> eventStoreCollector,
-        [ServiceBus(Models.PlNotifierSettings.DefaultQueueName)] IAsyncCollector<ServiceBusMessage> retryQueue,
-        ILogger logger)
+        FunctionContext context)
     {
-        logger.MessageReceived(message.MessageId, executionContext.FunctionName);
-        _retry.SetContext(message, retryQueue);
-        await RunInternal(message, messageActions, eventStoreCollector, executionContext, logger);
+        _logger.MessageReceived(message.MessageId, context.FunctionDefinition.Name);
 
-        logger.MessageProcessed(message.MessageId, executionContext.FunctionName);
+        await RunInternal(message, messageActions, context);
+
+        _logger.MessageProcessed(message.MessageId, context.FunctionDefinition.Name);
     }
 
     private async Task RunInternal(
         ServiceBusReceivedMessage message,
         ServiceBusMessageActions messageActions,
-        IAsyncCollector<ServiceBusMessage> eventStoreCollector,
-        ExecutionContext executionContext,
-        ILogger logger)
+        FunctionContext context)
     {
         try
         {
+            var retrySender = _serviceBusClient.CreateSender(Models.PlNotifierSettings.DefaultQueueName);
+            _retry.SetContext(message, retrySender);
+            var eventStoreSender = _serviceBusClient.CreateSender(Models.PlNotifierSettings.TradeEventInfo);
+
             await _baseMessageProcessorService.ProcessAsync(
-                executionContext.InvocationId.ToString(),
+                context.InvocationId.ToString(),
                 Models.PlNotifierSettings.DefaultQueueName,
                 Models.PlNotifierSettings.PublisherId,
                 message,
                 messageActions,
-                eventStoreCollector,
+                eventStoreSender,
                 originalCrmPublisherId: Models.PlNotifierSettings.PublisherId,
                 originalSource: Models.PlNotifierSettings.DefaultQueueName,
                 originalRequestName: "Update");
         }
         catch (Exception ex)
         {
-            logger.LogCritical(ex, ex.Message);
+            _logger.LogCritical(ex, ex.Message);
         }
     }
 }

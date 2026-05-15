@@ -8,8 +8,6 @@ using Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Helpers;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Defra.Trade.Events.IDCOMS.PLNotifier.Tests.Functions;
@@ -29,7 +27,7 @@ public sealed class HealthCheckHttpTriggerFunctionTests
     public void RunAsync_HasFunctionAttribute()
     {
         // Arrange & Act
-        var attribute = FunctionTestHelpers.MethodHasSingleAttribute<HealthCheckHttpTriggerFunction, FunctionNameAttribute>(
+        var attribute = FunctionTestHelpers.MethodHasSingleAttribute<HealthCheckHttpTriggerFunction, FunctionAttribute>(
             nameof(HealthCheckHttpTriggerFunction.RunAsync));
 
         // Assert

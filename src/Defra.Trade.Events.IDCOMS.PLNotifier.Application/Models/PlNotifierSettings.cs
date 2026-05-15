@@ -23,7 +23,7 @@ public sealed class PlNotifierSettings
 
     public const string DefaultQueueName = "defra.trade.plp.parsed";
     public const string PublisherId = PlNotifierHeaderConstants.PublisherId;
-    public const string TradeEventInfo = Common.Functions.Constants.QueueName.DefaultEventsInfoQueueName;
+    public const string TradeEventInfo = Common.Functions.Isolated.Constants.QueueName.DefaultEventsInfoQueueName;
     public const string AppConfigSentinelName = "Sentinel";
     public string PlNotifierQueue { get; set; } = DefaultQueueName;
 
